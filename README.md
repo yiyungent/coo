@@ -19,14 +19,19 @@ coo: 自用CLI，工具集.
 
 ## 使用
 
-> 需要现在本地安装 `.NET 6` 
+> 需要先在本地安装 `.NET 6 SDK`
 
-安装 `coo` 工具集
+- [Windows | .NET 6 SDK | 下载](https://dotnet.microsoft.com/download/dotnet/thank-you/sdk-6.0.100-windows-x64-installer)
+- [macOS | .NET 6 SDK | 下载](https://dotnet.microsoft.com/download/dotnet/thank-you/sdk-6.0.100-macos-x64-installer)
+- [Linux | .NET 6 SDK](https://docs.microsoft.com/dotnet/core/install/linux?WT.mc_id=dotnet-35129-website)
+
+然后 安装 `coo` 工具集
 
 ```bash
 dotnet tool install -g coo
 ```
 
+### 功能
 
 > 1. 清理 md文件的未引用图片: 例如使用 `Hexo`, 采用本地图片文件 (图片放在md同名文件夹下) 等    
 
