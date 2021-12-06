@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+
+		<OutputType>Exe</OutputType>
+		<TargetFrameworks>netcoreapp3.0;netcoreapp3.1;net5.0;net6.0;</TargetFrameworks>
+
+		<PackAsTool>true</PackAsTool>
+		<ToolCommandName>coo</ToolCommandName>
+		<PackageOutputPath>../../nupkg</PackageOutputPath>
+
+		<Version>0.0.1</Version>
+		<Company>yiyun</Company>
+		<Authors>yiyun</Authors>
+		<Description>自用CLI, 工具集</Description>
+		<Copyright>Copyright (c) 2020 yiyun</Copyright>
+		<RepositoryUrl>https://github.com/yiyungent/coo</RepositoryUrl>
+		<PackageLicenseUrl>https://github.com/yiyungent/coo/blob/master/LICENSE</PackageLicenseUrl>
+		<PackageTags>CLI Tools</PackageTags>
+
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21308.1" />
+	</ItemGroup>
+
+</Project>

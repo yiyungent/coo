@@ -1,5 +1,5 @@
 <p align="center">
-<img src="docs/_images/coo.png" alt="coo">
+<!-- <img src="docs/_images/coo.png" alt="coo"> -->
 </p>
 <h1 align="center">coo</h1>
 
@@ -17,6 +17,37 @@
 coo: 自用CLI，工具集.   
  
 
+## 使用
+
+> 需要现在本地安装 `.NET 6` 
+
+安装 `coo` 工具集
+
+```bash
+dotnet tool install -g coo
+```
+
+
+> 1. 清理 md文件的未引用图片: 例如使用 `Hexo`, 采用本地图片文件 (图片放在md同名文件夹下) 等    
+
+`"F:\Com\me\Repos\notebook\source\_posts"` 为 `Hexo文章目录`, 本人图片与文章处于同一目录下
+
+```bash
+# 统计分析
+coo mdimg "F:\Com\me\Repos\notebook\source\_posts"
+# 统计分析 并删除未引用图片
+coo mdimg -d "F:\Com\me\Repos\notebook\source\_posts"
+```
+
+
+> 补充:
+
+卸载 coo
+
+```bash
+dotnet tool uninstall -g coo
+```
+
 ## Donate
 
 coo is an MIT licensed open source project and completely free to use. However, the amount of effort needed to maintain and develop new features for the project is not sustainable without proper financial backing.
@@ -29,5 +60,5 @@ We accept donations through these channels:
 **coo** © [yiyun](https://github.com/yiyungent), Released under the [MIT](./LICENSE) License.<br>
 Authored and maintained by yiyun with help from contributors ([list](https://github.com/yiyungent/coo/contributors)).
 
-> GitHub [@yiyungent](https://github.com/yiyungent)
+> GitHub [@yiyungent](https://github.com/yiyungent) Gitee [@yiyungent](https://gitee.com/yiyungent)
 
