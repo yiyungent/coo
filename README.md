@@ -44,6 +44,15 @@ coo mdimg "F:\Com\me\Repos\notebook\source\_posts"
 coo mdimg -d "F:\Com\me\Repos\notebook\source\_posts"
 ```
 
+> 补充:  
+> 1. `所有图片数量=引用图片数+未引用图片数`      
+> 这个等式匹配不上 `属于正常现象`, 因为 匹配 所有图片 时, 目前仅匹配了 `png,jpg,jpeg,gif`, 而 你在md中引用的图片可能还有其它       
+> 因此 `所有图片数量<=引用图片数+未引用图片数`
+>      
+> 2. Windows, macOS 不区分路径大小写, 但 Linux 区分大小写      
+> 本工具匹配时, 忽略大小写, 因此不用担心 引用时, 大小写不一致 而导致工具以为 未引用此图片 而误删,       
+> 因此工具 可能存在漏删, 但不会误删除引用图片
+
 
 > 补充:
 
