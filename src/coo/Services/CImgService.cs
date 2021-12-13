@@ -104,11 +104,15 @@ namespace coo.Services
                     // 此 文件 所在目录
                     string mdDir = System.IO.Path.GetDirectoryName(file);
                     // 根据当前文件路径: 引用图片相对路径 转 绝对路径
-                    string imgAbsolutePath = Utils.FileUtil.RelativePathToAbsolutePath(imgRelativePath, mdDir);
-                    //Console.WriteLine($"{i} - {imgRelativePath} - {imgAbsolutePath}");
-
-                    //referencedImgAbsolutePathList.Add(imgAbsolutePath);
-                    referencedImgAbsolutePathList.Add(imgAbsolutePath.ToLower());
+                    try
+                    {
+                        string imgAbsolutePath = Utils.FileUtil.RelativePathToAbsolutePath(imgRelativePath, mdDir);
+                        referencedImgAbsolutePathList.Add(imgAbsolutePath.ToLower());
+                    }
+                    catch (Exception ex)
+                    {
+                        // 可能路径不存在, 或不合法, 导致无法转换为 AbsolutePath
+                    }
                 }
                 #endregion
 
@@ -143,11 +147,15 @@ namespace coo.Services
                     string fileDir = System.IO.Path.GetDirectoryName(file);
                     //Console.WriteLine($"fileDir: {fileDir}");
                     // 根据当前文件路径: 引用图片相对路径 转 绝对路径
-                    string imgAbsolutePath = Utils.FileUtil.RelativePathToAbsolutePath(imgRelativePath, fileDir);
-                    //Console.WriteLine($"{i} - {imgRelativePath} - {imgAbsolutePath}");
-
-                    //referencedImgAbsolutePathList.Add(imgAbsolutePath);
-                    referencedImgAbsolutePathList.Add(imgAbsolutePath.ToLower());
+                    try
+                    {
+                        string imgAbsolutePath = Utils.FileUtil.RelativePathToAbsolutePath(imgRelativePath, fileDir);
+                        referencedImgAbsolutePathList.Add(imgAbsolutePath.ToLower());
+                    }
+                    catch (Exception ex)
+                    {
+                        // 可能路径不存在, 或不合法, 导致无法转换为 AbsolutePath
+                    }
                 }
                 #endregion
 
