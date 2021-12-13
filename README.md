@@ -33,6 +33,8 @@ dotnet tool install -g coo
 
 ### 功能
 
+#### 1. mdimg
+
 > 1. 清理 md文件的未引用图片: 例如使用 `Hexo`, 采用本地图片文件 (图片放在md同名文件夹下) 等    
 
 `"F:\Com\me\Repos\notebook\source\_posts"` 为 `Hexo文章目录`, 本人图片与文章处于同一目录下
@@ -55,6 +57,20 @@ coo mdimg -d "F:\Com\me\Repos\notebook\source\_posts"
 > 
 > 3. 本工具通过检测 `文章.md` 中图片的相对路径引用, 并转换为绝对路径, 与目标目录的所有存在图片的绝对路径进行匹配, 来找出哪些图片未引用
 
+#### 2. cimg
+
+> 2. 清理 未引用图片  (`mdimg` 升级版)     
+> 支持识别 `md,html,htm` 
+
+> 支持 `相对路径`: 相对于当前命令行执行所在路径
+
+```bash
+coo cimg -d --ignore-paths="IgnoreDir1,IgnoreDir2,images/1.png" "source/_posts"
+```
+
+> `--ignore-paths="IgnoreDir1,IgnoreDir2,images/1.png"` 这些图片地址忽略, 不会被删除
+
+
 
 ### 补充
 
@@ -67,6 +83,7 @@ dotnet tool uninstall -g coo
 ## Related Projects
 
 - [yiyungent/hexo-asset-img: 🍰 Hexo 本地图片插件](https://github.com/yiyungent/hexo-asset-img)
+- [yiyungent/clear-image-action: 🔧 自动清理未引用图片 | GitHub Action](https://github.com/yiyungent/clear-image-action)
 
 ## Donate
 
