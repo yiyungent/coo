@@ -12,6 +12,9 @@ namespace coo
     {
         static void Main(string[] args)
         {
+            // GITHUB_ACTION_PATH: /home/runner/work/clear-image-action/clear-image-action/./
+            // GITHUB_WORKSPACE: /home/runner/work/clear-image-action/clear-image-action
+            // CurrentDirectory: /home/runner/work/clear-image-action/clear-image-action
             Console.WriteLine("------------------------------------------------------------------------");
             bool debug = Convert.ToBoolean(Utils.GitHubActionsUtil.GetEnv("cia_debug"));
             Console.WriteLine($"cia_debug: {debug}");
