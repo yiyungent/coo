@@ -358,7 +358,7 @@ namespace coo.Services
                     var item = referencedImgUrlList[i];
                     sbTemp.Append($"{i + 1}. <{item}>  \\n");
                 }
-
+                imageReport += $"{sbTemp.ToString()}  \\n";
                 imageReport += $"---  \\n";
 
                 // fixed: md,html,htm: command not found
