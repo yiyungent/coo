@@ -119,7 +119,7 @@ namespace coo.Services
                 MatchCollection htmlImgMatches = htmlImgRegex.Matches(fileContent);
                 for (int i = 1; i <= htmlImgMatches.Count; i++)
                 {
-                    string imgUrl = htmlImgMatches[i - 1].Groups["url"].Value;
+                    string imgUrl = htmlImgMatches[i - 1].Groups["imgUrl"].Value;
                     // 检测是否是网络图片
                     if (imgUrl.StartsWith("http://", StringComparison.InvariantCultureIgnoreCase)
                         || imgUrl.StartsWith("https://", StringComparison.InvariantCultureIgnoreCase))
@@ -130,10 +130,12 @@ namespace coo.Services
                     }
 
                     string imgRelativePath = imgUrl;
+                    //Console.WriteLine($"file: {file}");
                     // 此 文件 所在目录
-                    string mdDir = System.IO.Path.GetDirectoryName(file);
+                    string fileDir = System.IO.Path.GetDirectoryName(file);
+                    //Console.WriteLine($"fileDir: {fileDir}");
                     // 根据当前文件路径: 引用图片相对路径 转 绝对路径
-                    string imgAbsolutePath = Utils.FileUtil.RelativePathToAbsolutePath(imgRelativePath, mdDir);
+                    string imgAbsolutePath = Utils.FileUtil.RelativePathToAbsolutePath(imgRelativePath, fileDir);
                     //Console.WriteLine($"{i} - {imgRelativePath} - {imgAbsolutePath}");
 
                     //referencedImgAbsolutePathList.Add(imgAbsolutePath);

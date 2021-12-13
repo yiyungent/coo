@@ -54,8 +54,10 @@ namespace coo.Utils
         public static string RelativePathToAbsolutePath(string relativePath, string currentDirectory)
         {
             string originDir = AppDir;
+            //Console.WriteLine($"currentDirectory: {currentDirectory}");
             Directory.SetCurrentDirectory(currentDirectory);
             string absolutePath = Path.GetFullPath(relativePath);
+            //Console.WriteLine($"absolutePath: {absolutePath}");
 
             // Fixed: TODO: 这样做有弊端, 导致最后一次执行后，currentDirectory 变化
             // 执行完成后, 重新设置回原来 dir, 防止污染
