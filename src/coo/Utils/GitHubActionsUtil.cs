@@ -11,7 +11,7 @@ namespace coo.Utils
         public enum GitHubEnvKeyEnum
         {
             GITHUB_WORKSPACE = 0,
-            ACTION_PATH = 1
+            GITHUB_ACTION_PATH = 1
         }
 
         public static string GetEnv(string name)

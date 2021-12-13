@@ -15,7 +15,7 @@ namespace coo
             Console.WriteLine("------------------------------------------------------------------------");
             bool debug = Convert.ToBoolean(Utils.GitHubActionsUtil.GetEnv("cia_debug"));
             Console.WriteLine($"cia_debug: {debug}");
-            Console.WriteLine($"ACTION_PATH: {Utils.GitHubActionsUtil.GitHubEnv(Utils.GitHubActionsUtil.GitHubEnvKeyEnum.ACTION_PATH)}");
+            Console.WriteLine($"GITHUB_ACTION_PATH: {Utils.GitHubActionsUtil.GitHubEnv(Utils.GitHubActionsUtil.GitHubEnvKeyEnum.GITHUB_ACTION_PATH)}");
             Console.WriteLine($"GITHUB_WORKSPACE: {Utils.GitHubActionsUtil.GitHubEnv(Utils.GitHubActionsUtil.GitHubEnvKeyEnum.GITHUB_WORKSPACE)}");
             Console.WriteLine($"CurrentDirectory: {System.IO.Directory.GetCurrentDirectory()}");
             Console.WriteLine("------------------------------------------------------------------------");
