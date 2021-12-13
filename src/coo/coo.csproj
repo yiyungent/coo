@@ -9,18 +9,19 @@
 		<ToolCommandName>coo</ToolCommandName>
 		<PackageOutputPath>../../nupkg</PackageOutputPath>
 
-		<Version>0.0.1</Version>
+		<Version>0.1.0</Version>
 		<Company>yiyun</Company>
 		<Authors>yiyun</Authors>
 		<Description>自用CLI, 工具集</Description>
 		<Copyright>Copyright (c) 2020 yiyun</Copyright>
 		<RepositoryUrl>https://github.com/yiyungent/coo</RepositoryUrl>
-		<PackageLicenseUrl>https://github.com/yiyungent/coo/blob/master/LICENSE</PackageLicenseUrl>
+		<PackageLicenseUrl>https://github.com/yiyungent/coo/blob/main/LICENSE</PackageLicenseUrl>
 		<PackageTags>CLI Tools</PackageTags>
 
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21308.1" />
 	</ItemGroup>
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace coo.Services
 {
-    public class MdService
+    public class MdImgService
     {
 
         /// <summary>
@@ -26,12 +26,15 @@ namespace coo.Services
             List<string> allImageJpegList = new List<string>();
             Utils.FileUtil.GetFiles(postDir, "*.jpeg", ref allImageJpegList);
             List<string> allImageGifList = new List<string>();
-            Utils.FileUtil.GetFiles(postDir, "*.gif", ref allImageJpegList);
+            Utils.FileUtil.GetFiles(postDir, "*.gif", ref allImageGifList);
+            List<string> allImagWebpList = new List<string>();
+            Utils.FileUtil.GetFiles(postDir, "*.webp", ref allImagWebpList);
 
             allImageList.AddRange(allImagePngList);
             allImageList.AddRange(allImageJpgList);
             allImageList.AddRange(allImageJpegList);
             allImageList.AddRange(allImageGifList);
+            allImageList.AddRange(allImagWebpList);
             #endregion
 
             #region 扫描md文件

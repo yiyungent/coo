@@ -13,6 +13,8 @@ namespace coo
         static void Main(string[] args)
         {
             #region CLI
+
+            #region Hello
             if (args.Length == 0)
             {
                 var versionString = Assembly.GetEntryAssembly()
@@ -26,7 +28,9 @@ namespace coo
                 //Console.WriteLine("  coo <message>");
                 return;
             }
+            #endregion
 
+            #region RootCommand
             var rootCommand = new RootCommand("coo tool cli")
             {
                 //new Argument<string>("url","web site url"),
@@ -36,15 +40,17 @@ namespace coo
                 //new Option<bool>(new string[]{ "--anglesharp-option", "-agsharp"},"Use AngleSharp"),
                 //new Option<string>(new string[]{ "--download-path" ,"-path"},"Designate download path"),
             };
+            #endregion
 
+            #region mdimg
             var mdimgCommand = new Command("mdimg", "md and image");
             mdimgCommand.AddArgument(new Argument<string>("dir", "Set post (md and images) dir"));
             mdimgCommand.AddOption(new Option<bool>(new string[] { "--delete", "-d" }, "Delete unreferenced images"));
             mdimgCommand.Handler = CommandHandler.Create((string dir, bool delete) =>
             {
-                MdService mdService = new MdService();
+                MdImgService mdImgService = new MdImgService();
                 //string postDir = @"F:\Com\me\Repos\notebook\source\_posts";
-                List<string> unReferencedImgList = mdService.MdImgStat(dir);
+                List<string> unReferencedImgList = mdImgService.MdImgStat(dir);
                 if (delete)
                 {
                     int deleteSuccessCount = 0;
@@ -63,6 +69,22 @@ namespace coo
                 }
             });
             rootCommand.AddCommand(mdimgCommand);
+            #endregion
+
+            #region cimg
+            var cimgCommand = new Command("cimg", "Clean up unreferenced images");
+            cimgCommand.AddArgument(new Argument<string>("dir", "Set post (html, md, images) dir"));
+            cimgCommand.AddOption(new Option<bool>(new string[] { "--delete", "-d" }, "Delete unreferenced images"));
+            cimgCommand.AddOption(new Option<bool>(new string[] { "--github-action", "-ga" }, "outputs for GitHub Action"));
+            cimgCommand.AddOption(new Option<string>(new string[] { "--ignore-paths", "-ip" }, "ignore paths"));
+            cimgCommand.Handler = CommandHandler.Create((string dir, bool delete, bool githubAction, string ignorePaths) =>
+            {
+                CImgService cImgService = new CImgService();
+                //string postDir = @"F:\Com\me\Repos\notebook\source\_posts";
+                var resModel = cImgService.CImgStat(postDir: dir, githubAction: githubAction, ignorePathsStr: ignorePaths, delete: delete);
+            });
+            rootCommand.AddCommand(cimgCommand);
+            #endregion
 
 
             rootCommand.InvokeAsync(args);
