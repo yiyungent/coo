@@ -19,6 +19,7 @@ namespace coo.Services
         /// <returns>未引用图片路径</returns>
         public CImgStatModel CImgStat(string postDir, bool githubAction = false, string ignorePathsStr = null, bool delete = false)
         {
+            bool debug = Convert.ToBoolean(Utils.GitHubActionsUtil.GetEnv("cia_debug"));
             CImgStatModel rtnModel = null;
             List<string> ignorePaths = new List<string>();
             if (!string.IsNullOrEmpty(ignorePathsStr))
@@ -158,6 +159,9 @@ namespace coo.Services
             }
             #endregion
 
+            // 去重
+            referencedImgAbsolutePathList = referencedImgAbsolutePathList.Distinct(StringComparer.InvariantCultureIgnoreCase).ToList();
+            unReferencedImgAbsolutePathList = unReferencedImgAbsolutePathList.Distinct(StringComparer.InvariantCultureIgnoreCase).ToList();
             rtnModel = new CImgStatModel()
             {
                 FileCount = fileCount,
@@ -174,81 +178,87 @@ namespace coo.Services
             Console.WriteLine($"(md,html,htm) 文件 未引用本地图片 共: {unReferencedImgAbsolutePathList.Count}");
             Console.WriteLine("------------------------------------------------------------------------");
             Console.WriteLine("未引用本地图片:");
+            List<UnReferencedImgDeleteModel> deleteModels = new List<UnReferencedImgDeleteModel>();
             for (int i = 0; i < unReferencedImgAbsolutePathList.Count; i++)
             {
-                Console.WriteLine($"{i + 1}: {unReferencedImgAbsolutePathList[i]}");
-            }
-            Console.WriteLine("------------------------------------------------------------------------");
+                var imgAbsolutePath = unReferencedImgAbsolutePathList[i];
+                bool ignore = false;
+                foreach (var ignorePath in ignorePaths)
+                {
+                    string ignoreAbsolutePath = ignorePath;
+                    if (githubAction)
+                    {
+                        string githubWorkspace = Utils.GitHubActionsUtil.GitHubEnv(Utils.GitHubActionsUtil.GitHubEnvKeyEnum.GITHUB_WORKSPACE);
+                        // 注意: 若是 GitHub Action , 则 ignorePath 存储的是相对路径
+                        ignoreAbsolutePath = Utils.FileUtil.RelativePathToAbsolutePath(ignorePath, currentDirectory: githubWorkspace);
+                    }
+                    else
+                    {
+                        // 确保万一: 可能用 CLI 输入的 --ignore-paths 也是相对路径, 相对于 发起 CLI 所在目录, 例如仓库根目录
+                        ignoreAbsolutePath = System.IO.Path.GetFullPath(ignorePath);
+                    }
+                    //Console.WriteLine($"ignoreAbsolutePath: {ignoreAbsolutePath}");
+                    if (imgAbsolutePath.StartsWith(ignoreAbsolutePath, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        // 忽略
+                        ignore = true;
+                        break;
+                    }
+                }
+                if (ignore)
+                {
+                    deleteModels.Add(new UnReferencedImgDeleteModel
+                    {
+                        DeleteStatus = UnReferencedImgDeleteModel.DeleteStatusEnum.DeleteIgnore,
+                        ImgAbsolutePath = imgAbsolutePath
+                    });
+                }
+                else
+                {
+                    deleteModels.Add(new UnReferencedImgDeleteModel
+                    {
+                        DeleteStatus = UnReferencedImgDeleteModel.DeleteStatusEnum.NeedDelete,
+                        ImgAbsolutePath = imgAbsolutePath
+                    });
+                }
+                string deleteStatus = ignore ? "忽略" : "需删除";
 
+                Console.WriteLine($"{i + 1}: {imgAbsolutePath} - {deleteStatus}");
+            }
             Console.WriteLine("------------------------------------------------------------------------");
             #endregion
 
             #region 删除 未引用本地图片
-            List<UnReferencedImgDeleteModel> deleteModels = new List<UnReferencedImgDeleteModel>();
             if (delete)
             {
-                for (int i = 0; i < unReferencedImgAbsolutePathList.Count; i++)
+                for (int i = 0; i < deleteModels.Count; i++)
                 {
-                    var imgAbsolutePath = unReferencedImgAbsolutePathList[i];
+                    var model = deleteModels[i];
                     try
                     {
-                        bool ignore = false;
-                        foreach (var ignorePath in ignorePaths)
-                        {
-                            string ignoreAbsolutePath = ignorePath;
-                            if (githubAction)
-                            {
-                                string githubWorkspace = Utils.GitHubActionsUtil.GitHubEnv(Utils.GitHubActionsUtil.GitHubEnvKeyEnum.GITHUB_WORKSPACE);
-                                // 注意: 若是 GitHub Action , 则 ignorePath 存储的是相对路径
-                                ignoreAbsolutePath = Utils.FileUtil.RelativePathToAbsolutePath(ignorePath, currentDirectory: githubWorkspace);
-                            }
-                            else
-                            {
-                                // 确保万一: 可能用 CLI 输入的 --ignore-paths 也是相对路径, 相对于 发起 CLI 所在目录, 例如仓库根目录
-                                ignoreAbsolutePath = System.IO.Path.GetFullPath(ignorePath);
-                            }
-                            if (imgAbsolutePath.StartsWith(ignoreAbsolutePath, StringComparison.InvariantCultureIgnoreCase))
-                            {
-                                // 忽略
-                                ignore = true;
-                                break;
-                            }
-                        }
-
-                        if (ignore)
+                        if (model.DeleteStatus == UnReferencedImgDeleteModel.DeleteStatusEnum.DeleteIgnore)
                         {
                             // 忽略
-                            Console.WriteLine($"{i + 1}: 未引用图片: {imgAbsolutePath} - 忽略");
-                            deleteModels.Add(new UnReferencedImgDeleteModel
-                            {
-                                DeleteResult = UnReferencedImgDeleteModel.DeleteResultEnum.DeleteIgnore,
-                                ImgAbsolutePath = imgAbsolutePath
-                            });
+                            Console.WriteLine($"{i + 1}: 未引用图片: {model.ImgAbsolutePath} - 忽略");
                         }
                         else
                         {
                             // 删除
                             try
                             {
-                                System.IO.File.Delete(imgAbsolutePath);
+                                System.IO.File.Delete(model.ImgAbsolutePath);
 
-                                Console.WriteLine($"{i + 1}: 未引用图片: {imgAbsolutePath} - 删除成功");
-                                deleteModels.Add(new UnReferencedImgDeleteModel
-                                {
-                                    DeleteResult = UnReferencedImgDeleteModel.DeleteResultEnum.DeleteSuccess,
-                                    ImgAbsolutePath = imgAbsolutePath
-                                });
+                                Console.WriteLine($"{i + 1}: 未引用图片: {model.ImgAbsolutePath} - 删除成功");
+
+                                model.DeleteStatus = UnReferencedImgDeleteModel.DeleteStatusEnum.DeleteSuccess;
                             }
                             catch (Exception ex)
                             {
-                                Console.WriteLine($"{i + 1}: 未引用图片: {imgAbsolutePath} - 删除失败");
+                                Console.WriteLine($"{i + 1}: 未引用图片: {model.ImgAbsolutePath} - 删除失败");
 
                                 Utils.LogUtil.Exception(ex);
-                                deleteModels.Add(new UnReferencedImgDeleteModel
-                                {
-                                    DeleteResult = UnReferencedImgDeleteModel.DeleteResultEnum.DeleteFailure,
-                                    ImgAbsolutePath = imgAbsolutePath
-                                });
+
+                                model.DeleteStatus = UnReferencedImgDeleteModel.DeleteStatusEnum.DeleteFailure;
                             }
                         }
                     }
@@ -257,28 +267,31 @@ namespace coo.Services
                         Utils.LogUtil.Exception(ex);
                     }
                 }
+                Console.WriteLine("------------------------------------------------------------------------");
             }
-            Console.WriteLine("------------------------------------------------------------------------");
             #endregion
 
             #region GitHub Action 统计输出
             if (githubAction)
             {
                 // imageReport 使用 Markdown
-                string imageReport = $"--- \n  " +
-                                     $"(md,html,htm) 文件 共: {fileCount} \n  " +
-                                     $"本地图片 共: {allImageList.Count} \n" +
-                                     $"(md,html,htm) 文件 引用本地图片 共: {referencedImgAbsolutePathList.Count} \n  " +
-                                     $"(md,html,htm) 文件 未引用本地图片 共: {unReferencedImgAbsolutePathList.Count} \n  " +
-                                     $"--- \n  " +
-                                     $"未引用本地图片: \n  ";
+                string imageReport = $"---  \n" +
+                                     $"(md,html,htm) 文件 共: {fileCount}  \n" +
+                                     $"本地图片 共: {allImageList.Count}  \n" +
+                                     $"(md,html,htm) 文件 引用本地图片 共: {referencedImgAbsolutePathList.Count}  \n" +
+                                     $"(md,html,htm) 文件 未引用本地图片 共: {unReferencedImgAbsolutePathList.Count}  \n" +
+                                     $"---  \n" +
+                                     $"未引用本地图片:  \n";
                 StringBuilder sbTemp = new StringBuilder();
-                for (int i = 0; i < unReferencedImgAbsolutePathList.Count; i++)
+                for (int i = 0; i < deleteModels.Count; i++)
                 {
-                    sbTemp.Append($"{i + 1}: {unReferencedImgAbsolutePathList[i]} \n  ");
+                    var item = deleteModels[i];
+                    // 注意: 非 忽略 即为 需删除
+                    string deleteStatus = item.DeleteStatus != UnReferencedImgDeleteModel.DeleteStatusEnum.DeleteIgnore ? "需删除" : "忽略";
+                    sbTemp.Append($"{i + 1}: {deleteModels[i].ImgAbsolutePath} - {deleteStatus}  \n");
                 }
                 imageReport += sbTemp.ToString();
-                imageReport += $"--- \n  ";
+                imageReport += $"---  \n";
                 if (delete)
                 {
                     sbTemp = new StringBuilder();
@@ -286,24 +299,24 @@ namespace coo.Services
                     {
                         var item = deleteModels[i];
                         string deleteResult = "";
-                        switch (item.DeleteResult)
+                        switch (item.DeleteStatus)
                         {
-                            case UnReferencedImgDeleteModel.DeleteResultEnum.DeleteSuccess:
+                            case UnReferencedImgDeleteModel.DeleteStatusEnum.DeleteSuccess:
                                 deleteResult = "删除成功";
                                 break;
-                            case UnReferencedImgDeleteModel.DeleteResultEnum.DeleteFailure:
+                            case UnReferencedImgDeleteModel.DeleteStatusEnum.DeleteFailure:
                                 deleteResult = "删除失败";
                                 break;
-                            case UnReferencedImgDeleteModel.DeleteResultEnum.DeleteIgnore:
+                            case UnReferencedImgDeleteModel.DeleteStatusEnum.DeleteIgnore:
                                 deleteResult = "忽略";
                                 break;
                             default:
                                 break;
                         }
-                        sbTemp.Append($"{i + 1}: 未引用图片: {item.ImgAbsolutePath} - {deleteResult} \n  ");
+                        sbTemp.Append($"{i + 1}: 未引用图片: {item.ImgAbsolutePath} - {deleteResult}  \n");
                     }
 
-                    imageReport += $"--- \n";
+                    imageReport += $"---  \n";
                 }
                 Utils.GitHubActionsUtil.SetOutput("image_report", imageReport);
             }

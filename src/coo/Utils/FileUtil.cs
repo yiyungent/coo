@@ -10,6 +10,16 @@ namespace coo.Utils
     public class FileUtil
     {
         /// <summary>
+        /// 程序一启动为 根目录
+        /// </summary>
+        public static readonly string AppDir;
+
+        static FileUtil()
+        {
+            AppDir = Directory.GetCurrentDirectory();
+        }
+
+        /// <summary>
         /// 获取文件夹下所有文件
         /// </summary>
         /// <param name="directory">文件夹路径</param>
@@ -43,10 +53,15 @@ namespace coo.Utils
         /// <returns></returns>
         public static string RelativePathToAbsolutePath(string relativePath, string currentDirectory)
         {
-            //Directory.GetCurrentDirectory();
-            // TODO: 这样做有弊端, 导致最后一次执行后，currentDirectory 变化
+            string originDir = AppDir;
             Directory.SetCurrentDirectory(currentDirectory);
-            return Path.GetFullPath(relativePath);
+            string absolutePath = Path.GetFullPath(relativePath);
+
+            // Fixed: TODO: 这样做有弊端, 导致最后一次执行后，currentDirectory 变化
+            // 执行完成后, 重新设置回原来 dir, 防止污染
+            Directory.SetCurrentDirectory(originDir);
+
+            return absolutePath;
         }
 
 

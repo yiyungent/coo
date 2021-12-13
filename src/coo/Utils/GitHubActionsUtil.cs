@@ -21,7 +21,7 @@ namespace coo.Utils
             }
             name = name.ToUpper();
 
-            // 注意: 当没有这个环境变量时, 不会报错, 而是返回空字符串
+            // 注意: 当没有这个环境变量时, 不会报错, 而是返回 null
             return Environment.GetEnvironmentVariable(name);
         }
 
@@ -29,7 +29,7 @@ namespace coo.Utils
         {
             string envKey = gitHubEnvKeyEnum.ToString();
 
-            // 注意: 当没有这个环境变量时, 不会报错, 而是返回空字符串
+            // 注意: 当没有这个环境变量时, 不会报错, 而是返回 null
             return Environment.GetEnvironmentVariable(envKey);
         }
 

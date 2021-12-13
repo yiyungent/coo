@@ -1,0 +1,8 @@
+﻿dotnet tool uninstall -g coo
+
+dotnet pack
+
+dotnet tool install --global --add-source ./nupkg coo
+
+coo cimg --ignore-paths="test/coo.Tests/TestData/IgnoreDir1,test/coo.Tests/TestData/IgnoreDir2,test/coo.Tests/TestData/images/1.png" "test/coo.Tests/TestData"
+

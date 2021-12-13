@@ -6,14 +6,18 @@ namespace coo.Models.CImg
 {
     public class UnReferencedImgDeleteModel
     {
-        public enum DeleteResultEnum
+        public enum DeleteStatusEnum
         {
-            DeleteSuccess = 0,
-            DeleteFailure = 1,
-            DeleteIgnore = 2,
+            /// <summary>
+            /// 执行删除后, 此状态不再存在, 转为: DeleteSuccess 或 DeleteFailure
+            /// </summary>
+            NeedDelete = 0,
+            DeleteSuccess = 1,
+            DeleteFailure = 2,
+            DeleteIgnore = 3,
         }
 
-        public DeleteResultEnum DeleteResult { get; set; }
+        public DeleteStatusEnum DeleteStatus { get; set; }
 
         public string ImgAbsolutePath { get; set; }
 
