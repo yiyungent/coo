@@ -85,7 +85,11 @@ namespace coo.Services
                 MatchCollection mdImgMatches = mdImgRegex.Matches(fileContent);
                 for (int i = 1; i <= mdImgMatches.Count; i++)
                 {
-                    string imgUrl = mdImgMatches[i - 1].Groups["url"].Value;
+                    string imgUrl = mdImgMatches[i - 1]?.Groups["url"]?.Value;
+                    if (string.IsNullOrEmpty(imgUrl))
+                    {
+                        continue;
+                    }
                     // 检测是否是网络图片
                     if (imgUrl.StartsWith("http://", StringComparison.InvariantCultureIgnoreCase)
                         || imgUrl.StartsWith("https://", StringComparison.InvariantCultureIgnoreCase))
@@ -119,7 +123,11 @@ namespace coo.Services
                 MatchCollection htmlImgMatches = htmlImgRegex.Matches(fileContent);
                 for (int i = 1; i <= htmlImgMatches.Count; i++)
                 {
-                    string imgUrl = htmlImgMatches[i - 1].Groups["imgUrl"].Value;
+                    string imgUrl = htmlImgMatches[i - 1]?.Groups["imgUrl"]?.Value;
+                    if (string.IsNullOrEmpty(imgUrl))
+                    {
+                        continue;
+                    }
                     // 检测是否是网络图片
                     if (imgUrl.StartsWith("http://", StringComparison.InvariantCultureIgnoreCase)
                         || imgUrl.StartsWith("https://", StringComparison.InvariantCultureIgnoreCase))
