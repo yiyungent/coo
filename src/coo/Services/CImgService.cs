@@ -334,7 +334,7 @@ namespace coo.Services
                 imageReport += $"{sbTemp.ToString()}  \\n";
                 imageReport += $"---  \\n";
 
-                imageReport += $"### (md,html,htm) 文件 引用网络图片 共:{referencedImgUrlList.Count}  \\n";
+                imageReport += $"### `(md,html,htm)` 文件 引用网络图片 共:{referencedImgUrlList.Count}  \\n";
                 sbTemp = new StringBuilder();
                 sbTemp.Append($"### 引用网络图片:  \\n");
                 for (int i = 0; i < referencedImgUrlList.Count; i++)
@@ -344,6 +344,10 @@ namespace coo.Services
                 }
 
                 imageReport += $"---  \\n";
+
+                // fixed: md,html,htm: command not found
+                // ` 符号在 bash 中造成了歧义
+                imageReport = imageReport.Replace("`", "");
 
                 Utils.GitHubActionsUtil.SetOutput("image_report", imageReport);
             }
