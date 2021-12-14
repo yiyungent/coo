@@ -258,14 +258,14 @@ namespace coo.Services
 
                     for (int j = 0; j < fromFileList.Count; j++)
                     {
-                        Console.WriteLine($"{i}-{j + 1}. {fromFileList[j]}");
+                        Console.WriteLine($"{i + 1}-{j + 1}. {fromFileList[j]}");
                     }
 
                     if (githubAction)
                     {
                         for (int j = 0; j < fromFileList.Count; j++)
                         {
-                            sbTempReportGitHubAction.Append($"{i}-{j + 1}. {fromFileList[j].Replace($"{githubWorkSpace}/", "")}  \\n");
+                            sbTempReportGitHubAction.Append($"{i + 1}-{j + 1}. {fromFileList[j].Replace($"{githubWorkSpace}/", "")}  \\n");
                         }
                     }
 
