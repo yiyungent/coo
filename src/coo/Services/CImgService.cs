@@ -80,6 +80,10 @@ namespace coo.Services
                 // 匹配图片标记: ![描述](图片url)
                 // ![image-20210205221642687](dotnet-cli-coo/image-20210205221642687.png)
                 // 正则:   \!\[(?<desc>.*)\]\((?<url>.+)\)
+
+                // TODO: Bug:  [![爱发电](https://afdian.moeci.com/1/badge.svg)](https://afdian.net/@yiyun)
+                // 这种情况下, 匹配出错, 匹配到了 https://afdian.net/@yiyun
+
                 Regex mdImgRegex = new Regex(@"\!\[(?<desc>.*)\]\((?<url>.+)\)");
                 // 利用 (?<xxx>子表达式) 定义分组别名，这样就可以利用 Groups["xxx"] 进行访问分组/子表达式内容。
                 MatchCollection mdImgMatches = mdImgRegex.Matches(fileContent);
@@ -190,6 +194,7 @@ namespace coo.Services
             };
 
             #region 统计输出
+
             Console.WriteLine("------------------------------------------------------------------------");
             Console.WriteLine($"(md,html,htm) 文件 共: {fileCount}");
             Console.WriteLine($"本地图片 共: {allImageList.Count}");
@@ -197,6 +202,7 @@ namespace coo.Services
             Console.WriteLine($"(md,html,htm) 文件 未引用本地图片 共: {unReferencedImgAbsolutePathList.Count}");
             Console.WriteLine("------------------------------------------------------------------------");
 
+            #region 未引用本地图片
             Console.WriteLine("未引用本地图片:");
             List<UnReferencedImgDeleteModel> deleteModels = new List<UnReferencedImgDeleteModel>();
             for (int i = 0; i < unReferencedImgAbsolutePathList.Count; i++)
@@ -247,11 +253,14 @@ namespace coo.Services
                     string deleteStatus = ignore ? "忽略" : "需删除";
                     Console.WriteLine($"{i + 1}: {imgAbsolutePath} - {deleteStatus}");
                 }
-            }
+            } 
+            #endregion
+
             if (!delete)
             {
                 Console.WriteLine("------------------------------------------------------------------------");
             }
+
             #endregion
 
             #region 删除 未引用本地图片
@@ -314,6 +323,7 @@ namespace coo.Services
                                      $"---  \\n";
 
                 StringBuilder sbTemp = new StringBuilder();
+                #region 未引用本地图片
                 sbTemp.Append($"### 未引用本地图片:  \\n");
                 if (delete)
                 {
@@ -349,18 +359,21 @@ namespace coo.Services
                     }
                 }
                 imageReport += $"{sbTemp.ToString()}  \\n";
-                imageReport += $"---  \\n";
+                imageReport += $"---  \\n"; 
+                #endregion
 
-                imageReport += $"### `(md,html,htm)` 文件 引用网络图片 共: {referencedImgUrlList.Count}  \\n";
-                sbTemp = new StringBuilder();
-                sbTemp.Append($"### 引用网络图片:  \\n");
-                for (int i = 0; i < referencedImgUrlList.Count; i++)
-                {
-                    var item = referencedImgUrlList[i];
-                    sbTemp.Append($"{i + 1}. <{item}>  \\n");
-                }
-                imageReport += $"{sbTemp.ToString()}  \\n";
-                imageReport += $"---  \\n";
+                #region 引用网络图片
+                //imageReport += $"### `(md,html,htm)` 文件 引用网络图片 共: {referencedImgUrlList.Count}  \\n";
+                //sbTemp = new StringBuilder();
+                //sbTemp.Append($"### 引用网络图片:  \\n");
+                //for (int i = 0; i < referencedImgUrlList.Count; i++)
+                //{
+                //    var item = referencedImgUrlList[i];
+                //    sbTemp.Append($"{i + 1}. <{item}>  \\n");
+                //}
+                //imageReport += $"{sbTemp.ToString()}  \\n";
+                //imageReport += $"---  \\n"; 
+                #endregion
 
                 // fixed: md,html,htm: command not found
                 // ` 符号在 bash 中造成了歧义
