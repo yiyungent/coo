@@ -107,7 +107,7 @@ namespace coo.Services
                     try
                     {
                         string imgAbsolutePath = Utils.FileUtil.RelativePathToAbsolutePath(imgRelativePath, mdDir);
-                        referencedImgAbsolutePathList.Add(imgAbsolutePath.ToLower());
+                        referencedImgAbsolutePathList.Add(imgAbsolutePath);
                     }
                     catch (Exception ex)
                     {
@@ -150,7 +150,7 @@ namespace coo.Services
                     try
                     {
                         string imgAbsolutePath = Utils.FileUtil.RelativePathToAbsolutePath(imgRelativePath, fileDir);
-                        referencedImgAbsolutePathList.Add(imgAbsolutePath.ToLower());
+                        referencedImgAbsolutePathList.Add(imgAbsolutePath);
                     }
                     catch (Exception ex)
                     {
@@ -169,7 +169,7 @@ namespace coo.Services
                 // 在 Windows 下, 大小写应当不区分, 但这里 Contains 是区分的
                 // 为解决这个问题, 干脆大小写不敏感, 统一转小写, 宁可漏未引用的图片, 也不能删除了引用的图片
                 //if (!referencedImgAbsolutePathList.Contains(imgPath))
-                if (!referencedImgAbsolutePathList.Contains(imgPath.ToLower()))
+                if (!referencedImgAbsolutePathList.Contains(imgPath, StringComparer.InvariantCultureIgnoreCase))
                 {
                     // 未引用图片
                     unReferencedImgAbsolutePathList.Add(imgPath);
@@ -180,6 +180,7 @@ namespace coo.Services
             // 去重
             referencedImgAbsolutePathList = referencedImgAbsolutePathList.Distinct(StringComparer.InvariantCultureIgnoreCase).ToList();
             unReferencedImgAbsolutePathList = unReferencedImgAbsolutePathList.Distinct(StringComparer.InvariantCultureIgnoreCase).ToList();
+            referencedImgUrlList = referencedImgUrlList.Distinct().ToList();
             rtnModel = new CImgStatModel()
             {
                 FileCount = fileCount,
