@@ -12,16 +12,20 @@ namespace coo
     {
         static void Main(string[] args)
         {
-            // GITHUB_ACTION_PATH: /home/runner/work/clear-image-action/clear-image-action/./
-            // GITHUB_WORKSPACE: /home/runner/work/clear-image-action/clear-image-action
-            // CurrentDirectory: /home/runner/work/clear-image-action/clear-image-action
-            Console.WriteLine("------------------------------------------------------------------------");
-            bool debug = Convert.ToBoolean(Utils.GitHubActionsUtil.GetEnv("cia_debug"));
-            Console.WriteLine($"cia_debug: {debug}");
-            Console.WriteLine($"GITHUB_ACTION_PATH: {Utils.GitHubActionsUtil.GitHubEnv(Utils.GitHubActionsUtil.GitHubEnvKeyEnum.GITHUB_ACTION_PATH)}");
-            Console.WriteLine($"GITHUB_WORKSPACE: {Utils.GitHubActionsUtil.GitHubEnv(Utils.GitHubActionsUtil.GitHubEnvKeyEnum.GITHUB_WORKSPACE)}");
-            Console.WriteLine($"CurrentDirectory: {System.IO.Directory.GetCurrentDirectory()}");
-            Console.WriteLine("------------------------------------------------------------------------");
+            string githubWorkspace = Utils.GitHubActionsUtil.GitHubEnv(Utils.GitHubActionsUtil.GitHubEnvKeyEnum.GITHUB_WORKSPACE);
+            if (!string.IsNullOrEmpty(githubWorkspace))
+            {
+                // GITHUB_ACTION_PATH: /home/runner/work/clear-image-action/clear-image-action/./
+                // GITHUB_WORKSPACE: /home/runner/work/clear-image-action/clear-image-action
+                // CurrentDirectory: /home/runner/work/clear-image-action/clear-image-action
+                Console.WriteLine("------------------------------------------------------------------------");
+                bool debug = Convert.ToBoolean(Utils.GitHubActionsUtil.GetEnv("cia_debug"));
+                Console.WriteLine($"cia_debug: {debug}");
+                Console.WriteLine($"GITHUB_ACTION_PATH: {Utils.GitHubActionsUtil.GitHubEnv(Utils.GitHubActionsUtil.GitHubEnvKeyEnum.GITHUB_ACTION_PATH)}");
+                Console.WriteLine($"GITHUB_WORKSPACE: {githubWorkspace}");
+                Console.WriteLine($"CurrentDirectory: {System.IO.Directory.GetCurrentDirectory()}");
+                Console.WriteLine("------------------------------------------------------------------------");
+            }
 
             #region CLI
 
@@ -84,7 +88,7 @@ namespace coo
 
             #region cimg
             var cimgCommand = new Command("cimg", "Clean up unreferenced images");
-            cimgCommand.AddArgument(new Argument<string>("dir", "Set post (html, md, images) dir"));
+            cimgCommand.AddArgument(new Argument<string>("dir", "Set post (md, html, htm, images) dir"));
             cimgCommand.AddOption(new Option<bool>(new string[] { "--delete", "-d" }, "Delete unreferenced images"));
             cimgCommand.AddOption(new Option<bool>(new string[] { "--github-action", "-ga" }, "outputs for GitHub Action"));
             cimgCommand.AddOption(new Option<string>(new string[] { "--ignore-paths", "-ip" }, "ignore paths"));
@@ -95,6 +99,19 @@ namespace coo
                 var resModel = cImgService.CImgStat(postDir: dir, githubAction: githubAction, ignorePathsStr: ignorePaths, delete: delete);
             });
             rootCommand.AddCommand(cimgCommand);
+            #endregion
+
+            #region fimg
+            var fimgCommand = new Command("fimg", "check referenced images");
+            fimgCommand.AddArgument(new Argument<string>("dir", "Set post (md, html, htm, images) dir"));
+            fimgCommand.AddOption(new Option<bool>(new string[] { "--github-action", "-ga" }, "outputs for GitHub Action"));
+            fimgCommand.AddOption(new Option<string>(new string[] { "--ignore-paths", "-ip" }, "ignore paths"));
+            fimgCommand.Handler = CommandHandler.Create((string dir, bool githubAction, string ignorePaths) =>
+            {
+                FImgService fImgService = new FImgService();
+                var resModel = fImgService.Stat(postDir: dir, githubAction: githubAction, ignorePathsStr: ignorePaths);
+            });
+            rootCommand.AddCommand(fimgCommand);
             #endregion
 
 

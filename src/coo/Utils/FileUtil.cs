@@ -1,7 +1,10 @@
-﻿using System;
+﻿using SixLabors.ImageSharp;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -66,6 +69,65 @@ namespace coo.Utils
             return absolutePath;
         }
 
+        public static void GetLocalImageInfo(string imagePath, out long byteSize, out long width, out long height)
+        {
+            try
+            {
+                using (FileStream imageStream = File.Open(imagePath, FileMode.Open))
+                {
+                    byteSize = imageStream.Length;
+                }
+                //System.Drawing.Image mImage = System.Drawing.Image.FromFile(imagePath);
+                var mImage = Image.Load(imagePath);
+                width = mImage.Width;
+                height = mImage.Height;
+            }
+            catch (Exception ex)
+            {
+                byteSize = 0;
+                width = 0;
+                height = 0;
+            }
+        }
+
+
+        /// <summary> 
+        /// 获取网络图片的大小和尺寸 
+        /// </summary> 
+        /// <param name="imageUrl">图片url</param> 
+        /// <param name="byteSize">图片大小 (Byte)</param> 
+        /// <param name="widthxHeight">图片尺寸（WidthxHeight）</param> 
+        public static void GetRemoteImageInfo(string imageUrl, out long byteSize, out long width, out long height)
+        {
+            try
+            {
+                var httpClient = new HttpClient();
+                httpClient.Timeout = TimeSpan.FromSeconds(200);
+                var result = httpClient.GetAsync(imageUrl).Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    using (var stream = result.Content.ReadAsStreamAsync().Result)
+                    {
+                        byteSize = (stream.Length / 1024);
+                        var mImage = Image.Load(stream);
+                        width = mImage.Width;
+                        height = mImage.Height;
+                    }
+                }
+                else
+                {
+                    byteSize = 0;
+                    width = 0;
+                    height = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                byteSize = 0;
+                width = 0;
+                height = 0;
+            }
+        }
 
     }
 }
