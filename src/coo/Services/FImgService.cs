@@ -25,6 +25,10 @@ namespace coo.Services
             }
 
             #region 扫描文件
+            // key: referencedImgAbsolutePath or referencedImgUrl ; value: filePath
+            // 一个图片路径 可能被多处引用
+            Dictionary<string, List<string>> referencedImgAndFileDic = new Dictionary<string, List<string>>();
+
             // 所有引用的本地图片 绝对路径
             List<string> referencedImgAbsolutePathList = new List<string>();
             // 所有引用的网络图片 URL
@@ -75,6 +79,17 @@ namespace coo.Services
                         // TODO: // 开头也可以引用图片
                         referencedImgUrlList.Add(imgUrl);
 
+                        if (!referencedImgAndFileDic.ContainsKey(imgUrl))
+                        {
+                            List<string> tempList = new List<string>();
+                            tempList.Add(file);
+                            referencedImgAndFileDic.Add(imgUrl, tempList);
+                        }
+                        else
+                        {
+                            referencedImgAndFileDic[imgUrl].Add(file);
+                        }
+
                         continue;
                     }
 
@@ -86,6 +101,17 @@ namespace coo.Services
                     {
                         string imgAbsolutePath = Utils.FileUtil.RelativePathToAbsolutePath(imgRelativePath, mdDir);
                         referencedImgAbsolutePathList.Add(imgAbsolutePath);
+
+                        if (!referencedImgAndFileDic.ContainsKey(imgAbsolutePath))
+                        {
+                            List<string> tempList = new List<string>();
+                            tempList.Add(file);
+                            referencedImgAndFileDic.Add(imgAbsolutePath, tempList);
+                        }
+                        else
+                        {
+                            referencedImgAndFileDic[imgAbsolutePath].Add(file);
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -116,6 +142,17 @@ namespace coo.Services
                     {
                         referencedImgUrlList.Add(imgUrl);
 
+                        if (!referencedImgAndFileDic.ContainsKey(imgUrl))
+                        {
+                            List<string> tempList = new List<string>();
+                            tempList.Add(file);
+                            referencedImgAndFileDic.Add(imgUrl, tempList);
+                        }
+                        else
+                        {
+                            referencedImgAndFileDic[imgUrl].Add(file);
+                        }
+
                         continue;
                     }
 
@@ -129,6 +166,17 @@ namespace coo.Services
                     {
                         string imgAbsolutePath = Utils.FileUtil.RelativePathToAbsolutePath(imgRelativePath, fileDir);
                         referencedImgAbsolutePathList.Add(imgAbsolutePath);
+
+                        if (!referencedImgAndFileDic.ContainsKey(imgAbsolutePath))
+                        {
+                            List<string> tempList = new List<string>();
+                            tempList.Add(file);
+                            referencedImgAndFileDic.Add(imgAbsolutePath, tempList);
+                        }
+                        else
+                        {
+                            referencedImgAndFileDic[imgAbsolutePath].Add(file);
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -160,12 +208,13 @@ namespace coo.Services
             if (githubAction)
             {
                 githubWorkSpace = Utils.GitHubActionsUtil.GitHubEnv(Utils.GitHubActionsUtil.GitHubEnvKeyEnum.GITHUB_WORKSPACE);
-            } 
+            }
             #endregion
 
             #region 检查 引用的本地图片 是否存在
             Console.WriteLine("引用本地图片:");
             sbTempReportGitHubAction.Append("### 引用本地图片:  \\n");
+            int notExistLocalImgCount = 0;
             for (int i = 0; i < referencedImgAbsolutePathList.Count; i++)
             {
                 string imgAbsolutePath = referencedImgAbsolutePathList[i];
@@ -180,24 +229,55 @@ namespace coo.Services
                 }
                 if (existImgFile)
                 {
-                    Utils.FileUtil.GetLocalImageInfo(imgAbsolutePath, out long byteSize, out long width, out long height);
-                    string imgSize = Utils.CommonUtil.PrettyFileSize(byteSize);
+                    #region 由于输出太多, 因此暂时仅输出不存在的
+                    //Utils.FileUtil.GetLocalImageInfo(imgAbsolutePath, out long byteSize, out long width, out long height);
+                    //string imgSize = Utils.CommonUtil.PrettyFileSize(byteSize);
 
-                    Console.WriteLine($"{i + 1}. {imgAbsolutePath} - 存在 - {imgSize}");
+                    //Console.WriteLine($"{i + 1}. {imgAbsolutePath} - 存在 - {imgSize}");
 
-                    if (githubAction)
-                    {
-                        sbTempReportGitHubAction.Append($"{i + 1}. {imgAbsolutePath.Replace($"{githubWorkSpace}/", "")} - 存在 - {imgSize}  \\n");
-                    }
+                    //if (githubAction)
+                    //{
+                    //    sbTempReportGitHubAction.Append($"{i + 1}. {imgAbsolutePath.Replace($"{githubWorkSpace}/", "")} - 存在 - {imgSize}  \\n");
+                    //} 
+                    #endregion
                 }
                 else
                 {
-                    Console.WriteLine($"{i + 1}. {imgAbsolutePath} - 不存在 - ");
+                    // TODO: 由于 可能存在多个文件 引用同一路径图片, 并且做了路径去重处理, 因此无法找到 是哪些文件引用了此图片
+
+                    Console.WriteLine($"{i + 1}. {imgAbsolutePath} - 不存在");
+                    Console.WriteLine("引用自:");
 
                     if (githubAction)
                     {
                         sbTempReportGitHubAction.Append($"{i + 1}. {imgAbsolutePath.Replace($"{githubWorkSpace}/", "")} - 不存在  \\n");
+                        sbTempReportGitHubAction.Append("引用自:  \\n");
                     }
+
+                    List<string> fromFileList = referencedImgAndFileDic.First(m => m.Key == imgAbsolutePath).Value;
+
+                    for (int j = 0; j < fromFileList.Count; j++)
+                    {
+                        Console.WriteLine($"{i}-{j + 1}. {fromFileList[j]}");
+                    }
+
+                    if (githubAction)
+                    {
+                        for (int j = 0; j < fromFileList.Count; j++)
+                        {
+                            sbTempReportGitHubAction.Append($"{i}-{j + 1}. {fromFileList[j].Replace($"{githubWorkSpace}/", "")}  \\n");
+                        }
+                    }
+
+                    notExistLocalImgCount++;
+                }
+            }
+            if (notExistLocalImgCount == 0)
+            {
+                Console.WriteLine("祝贺: 没有 引用的本地图片 不存在的 情况");
+                if (githubAction)
+                {
+                    sbTempReportGitHubAction.Append("祝贺: 没有 引用的本地图片 不存在的 情况");
                 }
             }
             #endregion
