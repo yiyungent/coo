@@ -87,7 +87,11 @@ namespace coo.Services
                         }
                         else
                         {
-                            referencedImgAndFileDic[imgUrl].Add(file);
+                            // 注意: 可能存在 在此文件中, 多次引用同一路径图片
+                            if (!referencedImgAndFileDic[imgUrl].Contains(file))
+                            {
+                                referencedImgAndFileDic[imgUrl].Add(file);
+                            }
                         }
 
                         continue;
@@ -110,7 +114,11 @@ namespace coo.Services
                         }
                         else
                         {
-                            referencedImgAndFileDic[imgAbsolutePath].Add(file);
+                            // 注意: 可能存在 在此文件中, 多次引用同一路径图片
+                            if (!referencedImgAndFileDic[imgAbsolutePath].Contains(file))
+                            {
+                                referencedImgAndFileDic[imgAbsolutePath].Add(file);
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -150,7 +158,11 @@ namespace coo.Services
                         }
                         else
                         {
-                            referencedImgAndFileDic[imgUrl].Add(file);
+                            // 注意: 可能存在 在此文件中, 多次引用同一路径图片
+                            if (!referencedImgAndFileDic[imgUrl].Contains(file))
+                            {
+                                referencedImgAndFileDic[imgUrl].Add(file);
+                            }
                         }
 
                         continue;
@@ -175,7 +187,11 @@ namespace coo.Services
                         }
                         else
                         {
-                            referencedImgAndFileDic[imgAbsolutePath].Add(file);
+                            // 注意: 可能存在 在此文件中, 多次引用同一路径图片
+                            if (!referencedImgAndFileDic[imgAbsolutePath].Contains(file))
+                            {
+                                referencedImgAndFileDic[imgAbsolutePath].Add(file);
+                            }
                         }
                     }
                     catch (Exception ex)
