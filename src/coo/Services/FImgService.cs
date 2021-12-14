@@ -245,12 +245,12 @@ namespace coo.Services
                 {
                     // TODO: 由于 可能存在多个文件 引用同一路径图片, 并且做了路径去重处理, 因此无法找到 是哪些文件引用了此图片
 
-                    Console.WriteLine($"{i + 1}. {imgAbsolutePath} - 不存在");
+                    Console.WriteLine($"{notExistLocalImgCount + 1}. {imgAbsolutePath} - 不存在");
                     Console.WriteLine("引用自:");
 
                     if (githubAction)
                     {
-                        sbTempReportGitHubAction.Append($"{i + 1}. {imgAbsolutePath.Replace($"{githubWorkSpace}/", "")} - 不存在  \\n");
+                        sbTempReportGitHubAction.Append($"{notExistLocalImgCount + 1}. {imgAbsolutePath.Replace($"{githubWorkSpace}/", "")} - 不存在  \\n");
                         sbTempReportGitHubAction.Append("引用自:  \\n");
                     }
 
@@ -258,14 +258,14 @@ namespace coo.Services
 
                     for (int j = 0; j < fromFileList.Count; j++)
                     {
-                        Console.WriteLine($"{i + 1}-{j + 1}. {fromFileList[j]}");
+                        Console.WriteLine($"{notExistLocalImgCount + 1}-{j + 1}. {fromFileList[j]}");
                     }
 
                     if (githubAction)
                     {
                         for (int j = 0; j < fromFileList.Count; j++)
                         {
-                            sbTempReportGitHubAction.Append($"{i + 1}-{j + 1}. {fromFileList[j].Replace($"{githubWorkSpace}/", "")}  \\n");
+                            sbTempReportGitHubAction.Append($"{notExistLocalImgCount + 1}-{j + 1}. {fromFileList[j].Replace($"{githubWorkSpace}/", "")}  \\n");
                         }
                     }
 
