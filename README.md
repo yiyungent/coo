@@ -9,6 +9,7 @@
 [![LICENSE](https://img.shields.io/github/license/yiyungent/coo.svg?style=flat)](https://github.com/yiyungent/coo/blob/master/LICENSE)
 [![nuget](https://img.shields.io/nuget/v/coo.svg?style=flat)](https://www.nuget.org/packages/coo/)
 [![downloads](https://img.shields.io/nuget/dt/coo.svg?style=flat)](https://www.nuget.org/packages/coo/)
+[![QQ Group](https://img.shields.io/badge/QQ%20Group-894031109-deepgreen)](https://jq.qq.com/?_wv=1027&k=q5R82fYN)
 
 
 
