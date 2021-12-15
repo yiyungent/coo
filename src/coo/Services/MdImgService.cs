@@ -51,8 +51,8 @@ namespace coo.Services
                 // md文件: xxx/_posts/dotnet-cli-coo.md
                 // 匹配图片标记: ![描述](图片url)
                 // ![image-20210205221642687](dotnet-cli-coo/image-20210205221642687.png)
-                // 正则:   \!\[(?<desc>.*)\]\((?<url>.+)\)
-                Regex regex = new Regex(@"\!\[(?<desc>.*)\]\((?<url>.+)\)");
+                // 正则:   \!\[(?<desc>.*?)\]\((?<url>.+?)\)
+                Regex regex = new Regex(@"\!\[(?<desc>.*?)\]\((?<url>.+?)\)");
                 // 利用 (?<xxx>子表达式) 定义分组别名，这样就可以利用 Groups["xxx"] 进行访问分组/子表达式内容。
                 MatchCollection matches = regex.Matches(mdContent);
                 for (int i = 1; i <= matches.Count; i++)

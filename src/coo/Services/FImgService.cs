@@ -57,12 +57,13 @@ namespace coo.Services
                 // md文件: xxx/_posts/dotnet-cli-coo.md
                 // 匹配图片标记: ![描述](图片url)
                 // ![image-20210205221642687](dotnet-cli-coo/image-20210205221642687.png)
-                // 正则:   \!\[(?<desc>.*)\]\((?<url>.+)\)
+                // 正则:   \!\[(?<desc>.*?)\]\((?<url>.+?)\)
 
-                // TODO: Bug:  [![爱发电](https://afdian.moeci.com/1/badge.svg)](https://afdian.net/@yiyun)
+                // Bug:  [![爱发电](https://afdian.moeci.com/1/badge.svg)](https://afdian.net/@yiyun)
                 // 这种情况下, 匹配出错, 匹配到了 https://afdian.net/@yiyun
+                // fixed: 使用 ? 启用懒惰模式, 而不是贪婪导致匹配到了后面的(https://afdian.net/@yiyun)
 
-                Regex mdImgRegex = new Regex(@"\!\[(?<desc>.*)\]\((?<url>.+)\)");
+                Regex mdImgRegex = new Regex(@"\!\[(?<desc>.*?)\]\((?<url>.+?)\)");
                 // 利用 (?<xxx>子表达式) 定义分组别名，这样就可以利用 Groups["xxx"] 进行访问分组/子表达式内容。
                 MatchCollection mdImgMatches = mdImgRegex.Matches(fileContent);
                 for (int i = 1; i <= mdImgMatches.Count; i++)
