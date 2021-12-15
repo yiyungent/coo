@@ -2,6 +2,7 @@
 using System.IO;
 using System.IO.Compression;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 // Project: SimCaptcha
 // https://github.com/yiyungent/SimCaptcha
@@ -265,6 +266,32 @@ namespace coo.Utils
             }
 
             return rtResult;
+        }
+        #endregion
+
+        #region TestSuccess
+        public static bool TestSuccess(string url)
+        {
+            try
+            {
+                var httpClient = new HttpClient();
+                httpClient.Timeout = TimeSpan.FromSeconds(10);
+                var result = httpClient.GetAsync(url).Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            return false;
         }
         #endregion
 

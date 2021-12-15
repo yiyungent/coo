@@ -300,7 +300,67 @@ namespace coo.Services
             #endregion
 
             #region 检查 引用的网络图片 是否有效
+            Console.WriteLine("引用网络图片:");
+            sbTempReportGitHubAction.Append("### 引用网络图片:  \\n");
+            int successRemoteImgCount = 0;
+            for (int i = 0; i < referencedImgUrlList.Count; i++)
+            {
+                string imgUrl = referencedImgUrlList[i];
+                bool successStatusCode = false;
+                try
+                {
+                    // 测试网络图片是否有效
+                    successStatusCode = Utils.HttpUtil.TestSuccess(imgUrl);
+                }
+                catch (Exception ex)
+                {
+                    successStatusCode = false;
+                }
+                if (successStatusCode)
+                {
+                    #region 由于输出太多, 因此暂时仅输出不存在的
 
+                    #endregion
+                }
+                else
+                {
+                    // TODO: 由于 可能存在多个文件 引用同一路径图片, 并且做了路径去重处理, 因此无法找到 是哪些文件引用了此图片
+
+                    Console.WriteLine($"{successRemoteImgCount + 1}. {imgUrl} - 无效");
+                    Console.WriteLine("引用自:");
+
+                    if (githubAction)
+                    {
+                        sbTempReportGitHubAction.Append($"{successRemoteImgCount + 1}. {imgUrl} - 无效  \\n");
+                        sbTempReportGitHubAction.Append("引用自:  \\n");
+                    }
+
+                    List<string> fromFileList = referencedImgAndFileDic.First(m => m.Key == imgUrl).Value;
+
+                    for (int j = 0; j < fromFileList.Count; j++)
+                    {
+                        Console.WriteLine($"{successRemoteImgCount + 1}-{j + 1}. {fromFileList[j]}");
+                    }
+
+                    if (githubAction)
+                    {
+                        for (int j = 0; j < fromFileList.Count; j++)
+                        {
+                            sbTempReportGitHubAction.Append($"{successRemoteImgCount + 1}-{j + 1}. {fromFileList[j].Replace($"{githubWorkSpace}/", "")}  \\n");
+                        }
+                    }
+
+                    successRemoteImgCount++;
+                }
+            }
+            if (successRemoteImgCount == 0)
+            {
+                Console.WriteLine("祝贺: 没有 引用的网络图片 无效的 情况");
+                if (githubAction)
+                {
+                    sbTempReportGitHubAction.Append("祝贺: 没有 引用的网络图片 无效的 情况");
+                }
+            }
             #endregion
 
             #region Report GitHub Action
