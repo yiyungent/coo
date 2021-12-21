@@ -294,7 +294,7 @@ namespace coo.Services
                 Console.WriteLine("祝贺: 没有 引用的本地图片 不存在的 情况");
                 if (githubAction)
                 {
-                    sbTempReportGitHubAction.Append("祝贺: 没有 引用的本地图片 不存在的 情况");
+                    sbTempReportGitHubAction.Append("祝贺: 没有 引用的本地图片 不存在的 情况  \\n");
                 }
             }
             #endregion
@@ -358,7 +358,7 @@ namespace coo.Services
                 Console.WriteLine("祝贺: 没有 引用的网络图片 无效的 情况");
                 if (githubAction)
                 {
-                    sbTempReportGitHubAction.Append("祝贺: 没有 引用的网络图片 无效的 情况");
+                    sbTempReportGitHubAction.Append("祝贺: 没有 引用的网络图片 无效的 情况  \\n");
                 }
             }
             #endregion
