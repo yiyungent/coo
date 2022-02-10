@@ -9,7 +9,7 @@
 		<ToolCommandName>coo</ToolCommandName>
 		<PackageOutputPath>../../nupkg</PackageOutputPath>
 
-		<Version>0.3.1</Version>
+		<Version>0.4.0</Version>
 		<Company>yiyun</Company>
 		<Authors>yiyun</Authors>
 		<Description>自用CLI, 工具集</Description>
@@ -22,6 +22,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="Octokit" Version="0.50.0" />
 		<PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
 		<PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21308.1" />
 	</ItemGroup>

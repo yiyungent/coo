@@ -122,11 +122,12 @@ namespace coo
             var ustarCommand = new Command("ustar", "you star this repo?");
             ustarCommand.AddArgument(new Argument<string>("userName", "your GitHub userName"));
             ustarCommand.AddArgument(new Argument<string>("repoFullName", "GitHub repo fullname: yiyungent/coo"));
-            fimgCommand.AddOption(new Option<bool>(new string[] { "--github-action", "-ga" }, "outputs for GitHub Action"));
-            ustarCommand.Handler = CommandHandler.Create((string userName, string repoFullName, bool githubAction) =>
+            ustarCommand.AddArgument(new Argument<string>("githubToken", "GitHub token"));
+            ustarCommand.AddOption(new Option<bool>(new string[] { "--github-action", "-ga" }, "outputs for GitHub Action"));
+            ustarCommand.Handler = CommandHandler.Create((string userName, string repoFullName, string githubToken, bool githubAction) =>
             {
                 UStarService uStarService = new UStarService();
-                var resModel = uStarService.Star(userName, repoFullName, githubAction);
+                var resModel = uStarService.Star(userName, repoFullName, githubToken, githubAction);
             });
             rootCommand.AddCommand(ustarCommand);
             #endregion
