@@ -22,6 +22,10 @@ namespace coo
                 bool debug = Convert.ToBoolean(Utils.GitHubActionsUtil.GetEnv("cia_debug"));
                 Console.WriteLine($"cia_debug: {debug}");
                 Console.WriteLine($"GITHUB_ACTION_PATH: {Utils.GitHubActionsUtil.GitHubEnv(Utils.GitHubActionsUtil.GitHubEnvKeyEnum.GITHUB_ACTION_PATH)}");
+                Console.WriteLine($"GITHUB_REPOSITORY: {Utils.GitHubActionsUtil.GitHubEnv(Utils.GitHubActionsUtil.GitHubEnvKeyEnum.GITHUB_REPOSITORY)}");
+                Console.WriteLine($"GITHUB_REPOSITORY_OWNER: {Utils.GitHubActionsUtil.GitHubEnv(Utils.GitHubActionsUtil.GitHubEnvKeyEnum.GITHUB_REPOSITORY_OWNER)}");
+                Console.WriteLine($"GITHUB_WORKFLOW: {Utils.GitHubActionsUtil.GitHubEnv(Utils.GitHubActionsUtil.GitHubEnvKeyEnum.GITHUB_WORKFLOW)}");
+                Console.WriteLine($"GITHUB_ACTION_REPOSITORY: {Utils.GitHubActionsUtil.GitHubEnv(Utils.GitHubActionsUtil.GitHubEnvKeyEnum.GITHUB_ACTION_REPOSITORY)}");
                 Console.WriteLine($"GITHUB_WORKSPACE: {githubWorkspace}");
                 Console.WriteLine($"CurrentDirectory: {System.IO.Directory.GetCurrentDirectory()}");
                 Console.WriteLine("------------------------------------------------------------------------");
@@ -114,6 +118,18 @@ namespace coo
             rootCommand.AddCommand(fimgCommand);
             #endregion
 
+            #region ustar
+            var ustarCommand = new Command("ustar", "you star this repo?");
+            ustarCommand.AddArgument(new Argument<string>("userName", "your GitHub userName"));
+            ustarCommand.AddArgument(new Argument<string>("repoFullName", "GitHub repo fullname: yiyungent/coo"));
+            fimgCommand.AddOption(new Option<bool>(new string[] { "--github-action", "-ga" }, "outputs for GitHub Action"));
+            ustarCommand.Handler = CommandHandler.Create((string userName, string repoFullName, bool githubAction) =>
+            {
+                UStarService uStarService = new UStarService();
+                var resModel = uStarService.Star(userName, repoFullName, githubAction);
+            });
+            rootCommand.AddCommand(ustarCommand);
+            #endregion
 
             rootCommand.InvokeAsync(args);
 

@@ -11,7 +11,13 @@ namespace coo.Utils
         public enum GitHubEnvKeyEnum
         {
             GITHUB_WORKSPACE = 0,
-            GITHUB_ACTION_PATH = 1
+            GITHUB_ACTION_PATH = 1,
+            GITHUB_REPOSITORY_OWNER = 2,
+            GITHUB_PATH = 3,
+            GITHUB_ACTION = 4,
+            GITHUB_ACTION_REPOSITORY = 5,
+            GITHUB_REPOSITORY = 6,
+            GITHUB_WORKFLOW = 7
         }
 
         public static string GetEnv(string name)
