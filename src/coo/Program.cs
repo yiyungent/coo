@@ -132,6 +132,18 @@ namespace coo
             rootCommand.AddCommand(ustarCommand);
             #endregion
 
+            #region enex2md
+            var enex2MdCommand = new Command("enex2md", "enex to md");
+            ustarCommand.AddArgument(new Argument<string>("inputDir", "input enex dir"));
+            ustarCommand.AddArgument(new Argument<string>("outputDir", "output md dir"));
+            ustarCommand.Handler = CommandHandler.Create((string inputDir, string outputDir) =>
+            {
+                Enex2MdService enex2MdService = new Enex2MdService();
+                var resModel = enex2MdService.Dump(inputDir, outputDir);
+            });
+            rootCommand.AddCommand(enex2MdCommand);
+            #endregion
+
             rootCommand.InvokeAsync(args);
 
             #endregion
