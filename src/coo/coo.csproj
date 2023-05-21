@@ -3,7 +3,7 @@
 	<PropertyGroup>
 
 		<OutputType>Exe</OutputType>
-		<TargetFrameworks>netcoreapp3.1;net5.0;net6.0;</TargetFrameworks>
+		<TargetFrameworks>net6.0</TargetFrameworks>
 
 		<PackAsTool>true</PackAsTool>
 		<ToolCommandName>coo</ToolCommandName>
@@ -25,6 +25,10 @@
 		<PackageReference Include="Octokit" Version="0.50.0" />
 		<PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
 		<PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21308.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\EnexLib\EnexLib.csproj" />
 	</ItemGroup>
 
 </Project>

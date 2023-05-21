@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "coo", "src\coo\coo.csproj",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{1AE9B922-168B-45DA-A811-49F5D0181334}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "coo.Tests", "test\coo.Tests\coo.Tests.csproj", "{C26F1C06-2968-4B94-8770-CCA7FE3536B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "coo.Tests", "test\coo.Tests\coo.Tests.csproj", "{C26F1C06-2968-4B94-8770-CCA7FE3536B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnexLib", "src\EnexLib\EnexLib.csproj", "{5A447ECD-4E24-4D82-B884-F7FCB4B05694}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +27,10 @@ Global
 		{C26F1C06-2968-4B94-8770-CCA7FE3536B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C26F1C06-2968-4B94-8770-CCA7FE3536B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C26F1C06-2968-4B94-8770-CCA7FE3536B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A447ECD-4E24-4D82-B884-F7FCB4B05694}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A447ECD-4E24-4D82-B884-F7FCB4B05694}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A447ECD-4E24-4D82-B884-F7FCB4B05694}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A447ECD-4E24-4D82-B884-F7FCB4B05694}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +38,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{ABB0B2DF-2DF0-4F42-B63F-0070C94715BF} = {EA09F359-9B37-4695-B4C4-B3DA23DACB56}
 		{C26F1C06-2968-4B94-8770-CCA7FE3536B3} = {1AE9B922-168B-45DA-A811-49F5D0181334}
+		{5A447ECD-4E24-4D82-B884-F7FCB4B05694} = {EA09F359-9B37-4695-B4C4-B3DA23DACB56}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3D5B79CF-1449-4B6C-B286-0C7AC59CC9E9}
