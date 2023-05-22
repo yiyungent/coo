@@ -17,6 +17,8 @@ namespace EnexLib
         public XmlEntity.EnExport EnexExport { get; private set; }
 
         public string MdTemplateFilePath { get; set; }
+
+        public List<string> CatNameList { get; set; }
         #endregion
 
         #region Ctor
@@ -128,6 +130,7 @@ namespace EnexLib
             {
                 Note = note,
                 MdFileContent = mdFileContent,
+                CatNameList = CatNameList,
                 AttachmentPath = config.AttachmentPath,
                 MdFileName = mdFileName,
                 MdFileNameWithoutExtension = Path.GetFileNameWithoutExtension(mdFileName),

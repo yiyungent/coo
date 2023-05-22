@@ -26,6 +26,7 @@ namespace coo.Services
 
                         Console.WriteLine(relativeFilePath);
                         string mdDir = string.Empty;
+                        List<string> catNameList = new List<string>();
                         if (relativeFilePath.Contains(Path.DirectorySeparatorChar))
                         {
                             string relativeDirPath = relativeFilePath.Substring(0, relativeFilePath.LastIndexOf(Path.DirectorySeparatorChar));
@@ -33,14 +34,17 @@ namespace coo.Services
                             foreach (string folderName in splitFolderNames)
                             {
                                 mdDir = Path.Combine(mdDir, $"分类-{folderName}");
+                                catNameList.Add(folderName);
                             }
                         }
+                        catNameList.Add(Path.GetFileNameWithoutExtension(enexFilePath));
                         string fileOutputDir = Path.Combine(outputDir, mdDir, $"分类-{Path.GetFileNameWithoutExtension(enexFilePath)}");
                         EnexLib.EnexLib enexLib = new EnexLib.EnexLib();
                         if (!string.IsNullOrEmpty(template))
                         {
                             enexLib.MdTemplateFilePath = template;
                         }
+                        enexLib.CatNameList = catNameList;
                         enexLib.Load(enexFilePath);
                         enexLib.DumpAll(outputDir: fileOutputDir, new EnexLib.MarkdownConfig
                         {
