@@ -125,7 +125,8 @@ namespace EnexLib
             {
                 throw new FileNotFoundException(message: null, fileName: mdTemplateFilePath);
             }
-            string mdTemplateContent = File.ReadAllText(mdTemplateFilePath, Encoding.UTF8);
+            // string mdTemplateContent = File.ReadAllText(mdTemplateFilePath, Encoding.UTF8);
+            string mdTemplateContent = File.ReadAllText(mdTemplateFilePath);
             var mdTemplate = Template.Parse(mdTemplateContent);
             string mdTemplateRenderResult = mdTemplate.Render(new
             {
@@ -140,7 +141,8 @@ namespace EnexLib
             #endregion
 
             #region 写入内容
-            File.WriteAllText(Path.Combine(outputDir, mdFileName), mdTemplateRenderResult, Encoding.UTF8);
+            // File.WriteAllText(Path.Combine(outputDir, mdFileName), mdTemplateRenderResult, Encoding.UTF8);
+            File.WriteAllText(Path.Combine(outputDir, mdFileName), mdTemplateRenderResult);
             #endregion
         }
 
