@@ -46,7 +46,7 @@ namespace EnexLib
             {
                 config = new MarkdownConfig();
             }
-            string mdFileName = config.GuidFileName ? Guid.NewGuid().ToString() : Utility.SafeFileName(note.Title);
+            string mdFileName = config.GuidFileName ? $"evernote-{note.Created}-{Guid.NewGuid().ToString().Replace("-", "").Substring(0, 5)}" : Utility.SafeFileName(note.Title);
             mdFileName = Utility.SafeFileName($"{mdFileName}.md");
             config.AttachmentPath = Path.GetFileNameWithoutExtension(mdFileName);
             Directory.CreateDirectory(Path.Combine(outputDir, config.AttachmentPath));
@@ -76,7 +76,7 @@ namespace EnexLib
                     else if (!config.InlineImage && item.Mime.ToLower().StartsWith("image/"))
                     {
                         // 外联 图片文件
-                        var attachmentFileName = item.FileName;
+                        var attachmentFileName = $"image-{item.FileName}";
                         if (File.Exists(Path.Combine(outputDir, config.AttachmentPath, attachmentFileName)))
                         {
                             var ext = Path.GetExtension(attachmentFileName);
@@ -95,7 +95,7 @@ namespace EnexLib
                     else
                     {
                         // 其它 二进制文件
-                        var attachmentFileName = item.FileName;
+                        var attachmentFileName = $"attachment-{item.FileName}";
                         if (File.Exists(Path.Combine(outputDir, config.AttachmentPath, attachmentFileName)))
                         {
                             var ext = Path.GetExtension(attachmentFileName);
