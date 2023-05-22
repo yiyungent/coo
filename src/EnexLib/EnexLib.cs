@@ -70,13 +70,14 @@ namespace EnexLib
                     if (config.InlineImage && item.Mime.ToLower().StartsWith("image/"))
                     {
                         // 内联 base64 图片
+                        string attachmentFileName = $"image-{item.Data.Hash}{Path.GetExtension(item.FileName)}";
                         //mdFileContentSb.AppendLine($"[{item.Data.Hash}]: data:{item.Mime};base64,{item.Data.Base64}");
-                        mdFileContent = mdFileContent.Replace($"[{item.FileName}][{item.Data.Hash}]", $"[{Path.GetFileNameWithoutExtension(item.FileName)}](data:{item.Mime};base64,{item.Data.Base64})");
+                        mdFileContent = mdFileContent.Replace($"[{item.FileName}][{item.Data.Hash}]", $"[{Path.GetFileNameWithoutExtension(attachmentFileName)}](data:{item.Mime};base64,{item.Data.Base64})");
                     }
                     else if (!config.InlineImage && item.Mime.ToLower().StartsWith("image/"))
                     {
                         // 外联 图片文件
-                        var attachmentFileName = $"image-{item.FileName}";
+                        string attachmentFileName = $"image-{item.Data.Hash}{Path.GetExtension(item.FileName)}";
                         if (File.Exists(Path.Combine(outputDir, config.AttachmentPath, attachmentFileName)))
                         {
                             var ext = Path.GetExtension(attachmentFileName);
@@ -89,13 +90,13 @@ namespace EnexLib
                             attachmentFileName = $"{name}_{n}{ext}";
                         }
                         //sb.AppendLine($"![]({Path.GetFileNameWithoutExtension(mdFileName)}/{attachmentFileName})");
-                        mdFileContent = mdFileContent.Replace($"[{item.FileName}][{item.Data.Hash}]", $"[{Path.GetFileNameWithoutExtension(mdFileName)}]({Path.GetFileNameWithoutExtension(mdFileName)}/{attachmentFileName})");
+                        mdFileContent = mdFileContent.Replace($"[{item.FileName}][{item.Data.Hash}]", $"[{Path.GetFileNameWithoutExtension(attachmentFileName)}]({Path.GetFileNameWithoutExtension(mdFileName)}/{attachmentFileName})");
                         File.WriteAllBytes(Path.Combine(outputDir, config.AttachmentPath, attachmentFileName), item.Data.Content);
                     }
                     else
                     {
                         // 其它 二进制文件
-                        var attachmentFileName = $"attachment-{item.FileName}";
+                        string attachmentFileName = $"attachment-{item.Data.Hash}{Path.GetExtension(item.FileName)}";
                         if (File.Exists(Path.Combine(outputDir, config.AttachmentPath, attachmentFileName)))
                         {
                             var ext = Path.GetExtension(attachmentFileName);
@@ -108,7 +109,7 @@ namespace EnexLib
                             attachmentFileName = $"{name}_{n}{ext}";
                         }
                         //sb.AppendLine($"[{attachmentFileName}]({Path.GetFileNameWithoutExtension(mdFileName)}/{attachmentFileName})");
-                        mdFileContent = mdFileContent.Replace($"[{item.FileName}][{item.Data.Hash}]", $"[{Path.GetFileNameWithoutExtension(mdFileName)}]({Path.GetFileNameWithoutExtension(mdFileName)}/{attachmentFileName})");
+                        mdFileContent = mdFileContent.Replace($"[{item.FileName}][{item.Data.Hash}]", $"[{Path.GetFileNameWithoutExtension(attachmentFileName)}]({Path.GetFileNameWithoutExtension(mdFileName)}/{attachmentFileName})");
                         File.WriteAllBytes(Path.Combine(outputDir, config.AttachmentPath, attachmentFileName), item.Data.Content);
                     }
                 }
