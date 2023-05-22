@@ -69,7 +69,7 @@ namespace EnexLib
                     {
                         // 内联 base64 图片
                         //mdFileContentSb.AppendLine($"[{item.Data.Hash}]: data:{item.Mime};base64,{item.Data.Base64}");
-                        mdFileContent.Replace($"[{item.FileName}][{item.Data.Hash}]", $"[{Path.GetFileNameWithoutExtension(item.FileName)}](data:{item.Mime};base64,{item.Data.Base64})");
+                        mdFileContent = mdFileContent.Replace($"[{item.FileName}][{item.Data.Hash}]", $"[{Path.GetFileNameWithoutExtension(item.FileName)}](data:{item.Mime};base64,{item.Data.Base64})");
                     }
                     else if (!config.InlineImage && item.Mime.ToLower().StartsWith("image/"))
                     {
@@ -87,7 +87,7 @@ namespace EnexLib
                             attachmentFileName = $"{name}_{n}{ext}";
                         }
                         //sb.AppendLine($"![]({Path.GetFileNameWithoutExtension(mdFileName)}/{attachmentFileName})");
-                        mdFileContent.Replace($"[{item.FileName}][{item.Data.Hash}]", $"[{Path.GetFileNameWithoutExtension(mdFileName)}]({Path.GetFileNameWithoutExtension(mdFileName)}/{attachmentFileName})");
+                        mdFileContent = mdFileContent.Replace($"[{item.FileName}][{item.Data.Hash}]", $"[{Path.GetFileNameWithoutExtension(mdFileName)}]({Path.GetFileNameWithoutExtension(mdFileName)}/{attachmentFileName})");
                         File.WriteAllBytes(Path.Combine(outputDir, config.AttachmentPath, attachmentFileName), item.Data.Content);
                     }
                     else
@@ -106,7 +106,7 @@ namespace EnexLib
                             attachmentFileName = $"{name}_{n}{ext}";
                         }
                         //sb.AppendLine($"[{attachmentFileName}]({Path.GetFileNameWithoutExtension(mdFileName)}/{attachmentFileName})");
-                        mdFileContent.Replace($"[{item.FileName}][{item.Data.Hash}]", $"[{Path.GetFileNameWithoutExtension(mdFileName)}]({Path.GetFileNameWithoutExtension(mdFileName)}/{attachmentFileName})");
+                        mdFileContent = mdFileContent.Replace($"[{item.FileName}][{item.Data.Hash}]", $"[{Path.GetFileNameWithoutExtension(mdFileName)}]({Path.GetFileNameWithoutExtension(mdFileName)}/{attachmentFileName})");
                         File.WriteAllBytes(Path.Combine(outputDir, config.AttachmentPath, attachmentFileName), item.Data.Content);
                     }
                 }
@@ -127,6 +127,7 @@ namespace EnexLib
             string mdTemplateRenderResult = mdTemplate.Render(new
             {
                 Note = note,
+                MdFileContent = mdFileContent,
                 AttachmentPath = config.AttachmentPath,
                 MdFileName = mdFileName,
                 MdFileNameWithoutExtension = Path.GetFileNameWithoutExtension(mdFileName),

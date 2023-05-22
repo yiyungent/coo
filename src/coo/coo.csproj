@@ -9,7 +9,7 @@
 		<ToolCommandName>coo</ToolCommandName>
 		<PackageOutputPath>../../nupkg</PackageOutputPath>
 
-		<Version>0.4.0</Version>
+		<Version>0.4.1</Version>
 		<Company>yiyun</Company>
 		<Authors>yiyun</Authors>
 		<Description>自用CLI, 工具集</Description>
@@ -28,7 +28,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\EnexLib\EnexLib.csproj" />
+		<ProjectReference Include="..\EnexLib\EnexLib.csproj" />
 	</ItemGroup>
 
 </Project>

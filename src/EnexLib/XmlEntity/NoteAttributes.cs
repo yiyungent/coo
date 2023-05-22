@@ -24,7 +24,10 @@ namespace EnexLib.XmlEntity
         [XmlElement("author")]
         public string Author { get; set; }
 
-        [XmlElement("source")]
+        /// <summary>
+        /// System.ArgumentNullException: Value cannot be null. (Parameter 'source')
+        /// </summary>
+        [XmlElement("source", IsNullable = true)]
         public string Source { get; set; }
 
         [XmlElement("source-url")]

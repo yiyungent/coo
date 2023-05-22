@@ -10,7 +10,7 @@ namespace coo.Services
 {
     public class Enex2MdService
     {
-        public async Task<bool> Dump(string inputDir, string outputDir)
+        public async Task<bool> Dump(string inputDir, string outputDir, string template)
         {
             bool rtn = false;
 
@@ -22,16 +22,25 @@ namespace coo.Services
                     try
                     {
                         string enexFilePath = enexFilePathArray[i];
-                        string relativeFilePath = enexFilePath.Replace(new DirectoryInfo(inputDir).FullName, "");
-                        string relativeDirPath = new DirectoryInfo(relativeFilePath).Parent.FullName;
-                        string[] splitFolderNames = relativeDirPath.Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries);
+                        string relativeFilePath = enexFilePath.Replace(new DirectoryInfo(inputDir).FullName, "").Trim(Path.DirectorySeparatorChar);
+
+                        Console.WriteLine(relativeFilePath);
                         string mdDir = string.Empty;
-                        foreach (string folderName in splitFolderNames)
+                        if (relativeFilePath.Contains(Path.DirectorySeparatorChar))
                         {
-                            mdDir = Path.Combine(mdDir, $"分类-{folderName}");
+                            string relativeDirPath = relativeFilePath.Substring(0, relativeFilePath.LastIndexOf(Path.DirectorySeparatorChar));
+                            string[] splitFolderNames = relativeDirPath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries);
+                            foreach (string folderName in splitFolderNames)
+                            {
+                                mdDir = Path.Combine(mdDir, $"分类-{folderName}");
+                            }
                         }
                         string fileOutputDir = Path.Combine(outputDir, mdDir, $"分类-{Path.GetFileNameWithoutExtension(enexFilePath)}");
                         EnexLib.EnexLib enexLib = new EnexLib.EnexLib();
+                        if (!string.IsNullOrEmpty(template))
+                        {
+                            enexLib.MdTemplateFilePath = template;
+                        }
                         enexLib.Load(enexFilePath);
                         enexLib.DumpAll(outputDir: fileOutputDir, new EnexLib.MarkdownConfig
                         {
