@@ -48,6 +48,9 @@ namespace EnexLib
             }
             // 注意: 不能使用 Guid 会导致每次文件名不同
             // string mdFileName = config.GuidFileName ? $"evernote-{note.Created}-{Guid.NewGuid().ToString().Replace("-", "").Substring(0, 5)}" : Utility.SafeFileName(note.Title);
+            // TODO: BUG: 有时会生成两个 -, 即 --
+            // evernote-20180524T153937Z--144251972
+            // evernote-20180529T113033Z-1196295610
             string mdFileName = config.GuidFileName ? $"evernote-{note.Created}-{note.Title.GetHashCode().ToString()}" : Utility.SafeFileName(note.Title);
             mdFileName = Utility.SafeFileName($"{mdFileName}.md");
             config.AttachmentPath = Path.GetFileNameWithoutExtension(mdFileName);
