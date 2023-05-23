@@ -46,7 +46,9 @@ namespace EnexLib
             {
                 config = new MarkdownConfig();
             }
-            string mdFileName = config.GuidFileName ? $"evernote-{note.Created}-{Guid.NewGuid().ToString().Replace("-", "").Substring(0, 5)}" : Utility.SafeFileName(note.Title);
+            // 注意: 不能使用 Guid 会导致每次文件名不同
+            // string mdFileName = config.GuidFileName ? $"evernote-{note.Created}-{Guid.NewGuid().ToString().Replace("-", "").Substring(0, 5)}" : Utility.SafeFileName(note.Title);
+            string mdFileName = config.GuidFileName ? $"evernote-{note.Created}-{note.Title.GetHashCode().ToString()}" : Utility.SafeFileName(note.Title);
             mdFileName = Utility.SafeFileName($"{mdFileName}.md");
             config.AttachmentPath = Path.GetFileNameWithoutExtension(mdFileName);
             Directory.CreateDirectory(Path.Combine(outputDir, config.AttachmentPath));

@@ -9,7 +9,7 @@
 		<ToolCommandName>coo</ToolCommandName>
 		<PackageOutputPath>../../nupkg</PackageOutputPath>
 
-		<Version>0.4.5</Version>
+		<Version>0.4.6</Version>
 		<Company>yiyun</Company>
 		<Authors>yiyun</Authors>
 		<Description>自用CLI, 工具集</Description>
