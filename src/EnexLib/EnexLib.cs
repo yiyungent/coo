@@ -55,7 +55,7 @@ namespace EnexLib
             // string mdFileName = config.GuidFileName ? $"evernote-{note.Created}-{note.Title.GetHashCode().ToString()}" : Utility.SafeFileName(note.Title);
             // 保险起见, 使用 md5
             string createdStr = DateTime.ParseExact(note.Created, "yyyyMMddTHHmmssZ", null).ToString("yyyy-MM-dd-HH-mm-ss");
-            string mdFileName = config.UseUniqueIdFileName ? $"evernote-{createdStr}-{Utils.Md5Util.MD5Encrypt16(note.Title ?? "null title").Substring(0, 5)}-note" : Utility.SafeFileName(note.Title);
+            string mdFileName = config.UseUniqueIdFileName ? $"evernote-{createdStr}-{Utils.Md5Util.MD5Encrypt16(note.Title ?? "null title").Substring(0, 5)}-note".ToLower() : Utility.SafeFileName(note.Title);
             mdFileName = Utility.SafeFileName($"{mdFileName}.md");
             config.AttachmentPath = Path.GetFileNameWithoutExtension(mdFileName);
             Directory.CreateDirectory(Path.Combine(outputDir, config.AttachmentPath));
