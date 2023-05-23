@@ -48,10 +48,14 @@ namespace EnexLib
             }
             // 注意: 不能使用 Guid 会导致每次文件名不同
             // string mdFileName = config.GuidFileName ? $"evernote-{note.Created}-{Guid.NewGuid().ToString().Replace("-", "").Substring(0, 5)}" : Utility.SafeFileName(note.Title);
-            // TODO: BUG: 有时会生成两个 -, 即 --
+            // 有时会生成两个 -, 即 --, 这是因为 GetHashCode 可能为负数
             // evernote-20180524T153937Z--144251972
             // evernote-20180529T113033Z-1196295610
-            string mdFileName = config.GuidFileName ? $"evernote-{note.Created}-{note.Title.GetHashCode().ToString()}" : Utility.SafeFileName(note.Title);
+            // 发现 note.Title.GetHashCode() 对于相同字符串也会生成不同 HashCode, 于是也弃用, 很奇怪, 但直接使用 "Hello".GetHashCode() 却一致
+            // string mdFileName = config.GuidFileName ? $"evernote-{note.Created}-{note.Title.GetHashCode().ToString()}" : Utility.SafeFileName(note.Title);
+            // 保险起见, 使用 md5
+            string createdStr = DateTime.ParseExact(note.Created, "yyyyMMddTHHmmssZ", null).ToString("yyyy-MM-dd-HH-mm-ss");
+            string mdFileName = config.UseUniqueIdFileName ? $"evernote-{createdStr}-{Utils.Md5Util.MD5Encrypt16(note.Title ?? "null title").Substring(0, 5)}-note" : Utility.SafeFileName(note.Title);
             mdFileName = Utility.SafeFileName($"{mdFileName}.md");
             config.AttachmentPath = Path.GetFileNameWithoutExtension(mdFileName);
             Directory.CreateDirectory(Path.Combine(outputDir, config.AttachmentPath));
@@ -72,14 +76,14 @@ namespace EnexLib
             {
                 foreach (var item in note.Resource)
                 {
-                    if (config.InlineImage && item.Mime.ToLower().StartsWith("image/"))
+                    if (config.UseInlineImage && item.Mime.ToLower().StartsWith("image/"))
                     {
                         // 内联 base64 图片
                         string attachmentFileName = $"image-{item.Data.Hash}{Path.GetExtension(item.FileName)}";
                         //mdFileContentSb.AppendLine($"[{item.Data.Hash}]: data:{item.Mime};base64,{item.Data.Base64}");
                         mdFileContent = mdFileContent.Replace($"[{item.FileName}][{item.Data.Hash}]", $"[{Path.GetFileNameWithoutExtension(attachmentFileName)}](data:{item.Mime};base64,{item.Data.Base64})");
                     }
-                    else if (!config.InlineImage && item.Mime.ToLower().StartsWith("image/"))
+                    else if (!config.UseInlineImage && item.Mime.ToLower().StartsWith("image/"))
                     {
                         // 外联 图片文件
                         string attachmentFileName = $"image-{item.Data.Hash}{Path.GetExtension(item.FileName)}";

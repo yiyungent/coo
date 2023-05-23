@@ -10,7 +10,7 @@ namespace coo.Services
 {
     public class Enex2MdService
     {
-        public async Task<bool> Dump(string inputDir, string outputDir, string template, bool useGuid)
+        public async Task<bool> Dump(string inputDir, string outputDir, string template, bool useId)
         {
             bool rtn = false;
 
@@ -48,8 +48,8 @@ namespace coo.Services
                         enexLib.Load(enexFilePath);
                         enexLib.DumpAll(outputDir: fileOutputDir, new EnexLib.MarkdownConfig
                         {
-                            InlineImage = false,
-                            GuidFileName = useGuid,
+                            UseInlineImage = false,
+                            UseUniqueIdFileName = useId,
                         });
                     }
                     catch (Exception ex)

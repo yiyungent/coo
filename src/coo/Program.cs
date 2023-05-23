@@ -137,14 +137,14 @@ namespace coo
             enex2MdCommand.AddArgument(new Argument<string>("inputDir", "input enex dir"));
             enex2MdCommand.AddArgument(new Argument<string>("outputDir", "output md dir"));
             enex2MdCommand.AddOption(new Option<string>(new string[] { "--template", "-t" }, "note markdown template file path"));
-            enex2MdCommand.AddOption(new Option<bool>(new string[] { "--use-guid", "-u" }, "note markdown fileName: Guid"));
-            enex2MdCommand.Handler = CommandHandler.Create((string inputDir, string outputDir, string template, bool useGuid) =>
+            enex2MdCommand.AddOption(new Option<bool>(new string[] { "--use-id", "-u" }, "whether to use unique identifier as md filename"));
+            enex2MdCommand.Handler = CommandHandler.Create((string inputDir, string outputDir, string template, bool useId) =>
             {
                 Enex2MdService enex2MdService = new Enex2MdService();
                 inputDir = inputDir.Replace('/', System.IO.Path.DirectorySeparatorChar).Replace('\\', System.IO.Path.DirectorySeparatorChar);
                 outputDir = outputDir.Replace('/', System.IO.Path.DirectorySeparatorChar).Replace('\\', System.IO.Path.DirectorySeparatorChar);
                 template = template.Replace('/', System.IO.Path.DirectorySeparatorChar).Replace('\\', System.IO.Path.DirectorySeparatorChar);
-                var resModel = enex2MdService.Dump(inputDir, outputDir, template, useGuid);
+                var resModel = enex2MdService.Dump(inputDir, outputDir, template, useId);
             });
             rootCommand.AddCommand(enex2MdCommand);
             #endregion

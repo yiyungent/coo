@@ -12,17 +12,25 @@ namespace EnexLib
         /// <summary>
         /// 附件路径，默认为 ""
         /// </summary>
+        /// <remarks>
+        /// 1. 附件路径 为 ""
+        /// hello.md
+        /// hello/image-a.png
+        /// 2. 附件路径 为 "files"
+        /// hello.md
+        /// hello/files/image-a.png
+        /// </remarks>
         public string AttachmentPath { get; set; }
 
         /// <summary>
-        /// 是否内联保存图片，即在 markdown 文件内保存 base64 编码的图片，默认为 false
+        /// 是否 内联保存图片，即在 markdown 文件内保存 base64 编码的图片，默认为 false
         /// </summary>
-        public bool InlineImage { get; set; }
+        public bool UseInlineImage { get; set; }
 
         /// <summary>
-        /// 是否使用唯一的 GUID 作为 markdown 文件名，默认为 false，使用原始标题作为文件名
+        /// 是否使用 唯一标识 作为 markdown 文件名，默认为 false, 使用 原始标题 作为文件名
         /// </summary>
-        public bool GuidFileName { get; set; }
+        public bool UseUniqueIdFileName { get; set; }
         #endregion
 
         #region Ctor
@@ -32,8 +40,8 @@ namespace EnexLib
             GithubFlavored = true;
             //AttachmentPath = "files/";
             AttachmentPath = "";
-            InlineImage = false;
-            GuidFileName = false;
+            UseInlineImage = false;
+            UseUniqueIdFileName = false;
         } 
         #endregion
     }
