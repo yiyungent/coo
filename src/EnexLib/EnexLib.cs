@@ -91,7 +91,7 @@ namespace EnexLib
                         {
                             var ext = Path.GetExtension(attachmentFileName);
                             var name = Path.GetFileNameWithoutExtension(attachmentFileName);
-                            var n = 1;
+                            var n = 2;
                             while (File.Exists(Path.Combine(outputDir, config.AttachmentPath, $"{name}_{n}{ext}")))
                             {
                                 ++n;
@@ -110,7 +110,7 @@ namespace EnexLib
                         {
                             var ext = Path.GetExtension(attachmentFileName);
                             var name = Path.GetFileNameWithoutExtension(attachmentFileName);
-                            var n = 1;
+                            var n = 2;
                             while (File.Exists(Path.Combine(outputDir, config.AttachmentPath, $"{name}_{n}{ext}")))
                             {
                                 ++n;
