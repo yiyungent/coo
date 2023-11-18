@@ -3,7 +3,7 @@
 </p>
 <h1 align="center">coo</h1>
 
-> :cake: 自用CLI
+> 🧰 .NET 自用 CLI | 工具集
 
 [![repo size](https://img.shields.io/github/repo-size/yiyungent/coo.svg?style=flat)]()
 [![LICENSE](https://img.shields.io/github/license/yiyungent/coo.svg?style=flat)](https://github.com/yiyungent/coo/blob/master/LICENSE)
@@ -15,7 +15,7 @@
 
 ## 介绍
 
-coo: 自用CLI，工具集.   
+🧰 .NET 自用 CLI | 工具集
  
 
 ## 使用
