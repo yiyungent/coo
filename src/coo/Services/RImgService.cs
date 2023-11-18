@@ -49,11 +49,13 @@ namespace coo.Services
             #endregion
 
             #region 重命名图片文件名并将对应的md文件中引用替换
+            int i = 0;
             foreach (var imageFilePath in allImageList)
             {
                 try
                 {
                     // 图片文件重命名
+                    #region 图片文件重命名
                     string oldFileName = Path.GetFileName(imageFilePath);
                     string fileMd5 = FileUtil.GetMD5HashFromFile(imageFilePath);
                     string newFileName = $"image-{fileMd5}{Path.GetExtension(imageFilePath)}";
@@ -62,18 +64,21 @@ namespace coo.Services
                     if (File.Exists(newImageFilePath))
                     {
                         // 已存在: 重复: 由于是从文件内容计算 md5, 因此甚至是图片文件重复
-                        Console.WriteLine($"已存在: {newImageFilePath}");
+                        Console.WriteLine($"{(i + 1)}. 已存在: {newImageFilePath}");
                         continue;
                     }
                     else
                     {
                         File.Move(imageFilePath, newImageFilePath);
 
+                        Console.WriteLine($"{(i + 1)}");
                         Console.WriteLine(imageFileDir);
                         Console.WriteLine("->");
                         Console.WriteLine(newImageFilePath);
                     }
+                    #endregion
                     // 对应的 md 文件中图片引用替换
+                    #region 图片引用替换
                     string mdFilePath = allMdList.FirstOrDefault(m => m.ToLower() == $"{imageFileDir}.md".ToLower());
                     if (!string.IsNullOrEmpty(mdFilePath))
                     {
@@ -81,11 +86,14 @@ namespace coo.Services
                         string newMdFileContent = mdFileContent.Replace(oldFileName, newFileName);
                         File.WriteAllText(mdFilePath, newMdFileContent, System.Text.Encoding.UTF8);
                     }
+                    #endregion
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine($"{(i + 1)}");
                     LogUtil.Exception(ex);
                 }
+                i++;
             }
             #endregion
 
