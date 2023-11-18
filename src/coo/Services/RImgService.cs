@@ -18,9 +18,10 @@ namespace coo.Services
         /// <param name="postDir"></param>
         public void RenameImg(string postDir)
         {
-            // md 文件:   _posts/2023/02/nps-notebook.md
-            // 图片文件夹: _posts/2023/02/nps-notebook
-            // 图片文件:   _posts/2023/02/nps-notebook/image-2023-02-25-16-40-33.png
+            // md 文件:          _posts/2023/02/nps-notebook.md
+            // 图片文件夹:        _posts/2023/02/nps-notebook
+            // 图片文件:          _posts/2023/02/nps-notebook/image-2023-02-25-16-40-33.png
+            // md 文件中图片引用: ![image-2023-02-25-16-40-33](nps-notebook/image-2023-02-25-16-40-33.png)
             // 注意: 路径比较都要忽略大小写
 
             List<string> allImageList = new List<string>();
@@ -57,8 +58,10 @@ namespace coo.Services
                     // 图片文件重命名
                     #region 图片文件重命名
                     string oldFileName = Path.GetFileName(imageFilePath);
+                    string oldFileNameWithoutExt = Path.GetFileNameWithoutExtension(oldFileName);
                     string fileMd5 = FileUtil.GetMD5HashFromFile(imageFilePath);
                     string newFileName = $"image-{fileMd5}{Path.GetExtension(imageFilePath)}";
+                    string newFileNameWithoutExt = Path.GetFileNameWithoutExtension(newFileName);
                     string imageFileDir = Path.GetDirectoryName(imageFilePath);
                     string newImageFilePath = Path.Combine(imageFileDir, newFileName);
                     if (File.Exists(newImageFilePath))
@@ -84,6 +87,7 @@ namespace coo.Services
                     {
                         string mdFileContent = File.ReadAllText(mdFilePath, System.Text.Encoding.UTF8);
                         string newMdFileContent = mdFileContent.Replace(oldFileName, newFileName);
+                        newMdFileContent = mdFileContent.Replace(oldFileNameWithoutExt, newFileNameWithoutExt);
                         File.WriteAllText(mdFilePath, newMdFileContent, System.Text.Encoding.UTF8);
                     }
                     #endregion

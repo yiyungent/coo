@@ -9,10 +9,10 @@
 		<ToolCommandName>coo</ToolCommandName>
 		<PackageOutputPath>../../nupkg</PackageOutputPath>
 
-		<Version>0.4.10</Version>
+		<Version>0.4.11</Version>
 		<Company>yiyun</Company>
 		<Authors>yiyun</Authors>
-		<Description>自用 CLI, 工具集</Description>
+		<Description>.NET 自用 CLI | 工具集</Description>
 		<Copyright>Copyright (c) 2020-present yiyun</Copyright>
 		<RepositoryUrl>https://github.com/yiyungent/coo</RepositoryUrl>
 		<PackageLicenseUrl>https://github.com/yiyungent/coo/blob/main/LICENSE</PackageLicenseUrl>
