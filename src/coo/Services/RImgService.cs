@@ -71,8 +71,8 @@ namespace coo.Services
                     {
                         File.Move(imageFilePath, newImageFilePath);
 
-                        Console.WriteLine($"{(i + 1)}");
-                        Console.WriteLine(imageFileDir);
+                        Console.WriteLine($"{(i + 1)}.");
+                        Console.WriteLine(imageFilePath);
                         Console.WriteLine("->");
                         Console.WriteLine(newImageFilePath);
                     }
@@ -90,7 +90,7 @@ namespace coo.Services
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"{(i + 1)}");
+                    Console.WriteLine($"{(i + 1)}.");
                     LogUtil.Exception(ex);
                 }
                 i++;
