@@ -129,5 +129,70 @@ namespace coo.Utils
             }
         }
 
+        #region 计算MD5
+        /// <summary>
+        /// 获取文件的MD5码
+        /// </summary>
+        /// <param name="fileName">文件的完整绝对路径: 传入的文件名（含路径及后缀名）</param>
+        /// <returns></returns>
+        public static string GetMD5HashFromFile(string filePath)
+        {
+            try
+            {
+                FileStream file = new FileStream(filePath, System.IO.FileMode.Open);
+                //System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+                System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create();
+                byte[] retVal = md5.ComputeHash(file);
+                file.Close();
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < retVal.Length; i++)
+                {
+                    sb.Append(retVal[i].ToString("x2"));
+                }
+                return sb.ToString();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("GetMD5HashFromFile() fail,error:" + ex.Message);
+            }
+        }
+
+        public static string GetFileMD5(string filePath)
+        {
+            FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            int bufferSize = 1048576;
+            byte[] buff = new byte[bufferSize];
+            System.Security.Cryptography.MD5CryptoServiceProvider md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+            md5.Initialize();
+            long offset = 0;
+            while (offset < fs.Length)
+            {
+                long readSize = bufferSize;
+                if (offset + readSize > fs.Length)
+                    readSize = fs.Length - offset;
+                fs.Read(buff, 0, Convert.ToInt32(readSize));
+                if (offset + readSize < fs.Length)
+                    md5.TransformBlock(buff, 0, Convert.ToInt32(readSize), buff, 0);
+                else
+                    md5.TransformFinalBlock(buff, 0, Convert.ToInt32(readSize));
+                offset += bufferSize;
+            }
+            if (offset >= fs.Length)
+            {
+                fs.Close();
+                byte[] result = md5.Hash;
+                md5.Clear();
+                StringBuilder sb = new StringBuilder(32);
+                for (int i = 0; i < result.Length; i++)
+                    sb.Append(result[i].ToString("X2"));
+                return sb.ToString();
+            }
+            else
+            {
+                fs.Close();
+                return null;
+            }
+        }
+        #endregion
     }
 }

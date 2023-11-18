@@ -149,6 +149,17 @@ namespace coo
             rootCommand.AddCommand(enex2MdCommand);
             #endregion
 
+            #region rimg
+            var rimgCommand = new Command("rimg", "rename image file");
+            rimgCommand.AddArgument(new Argument<string>("dir", "Set post (md, images) dir"));
+            rimgCommand.Handler = CommandHandler.Create((string dir) =>
+            {
+                RImgService rImgService = new RImgService();
+                rImgService.RenameImg(dir);
+            });
+            rootCommand.AddCommand(rimgCommand);
+            #endregion
+
             rootCommand.InvokeAsync(args);
 
             #endregion
