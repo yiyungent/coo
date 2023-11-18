@@ -97,7 +97,7 @@ namespace coo.Services
                         string newMdFileContent = mdFileContent
                             .Replace($"{mdFileNameWithoutExt}/{oldFileName}", $"{mdFileNameWithoutExt}/{newFileName}", StringComparison.InvariantCultureIgnoreCase);
                         //newMdFileContent = mdFileContent.Replace($"![{oldFileNameWithoutExt}](", $"![{newFileNameWithoutExt}](");
-                        newMdFileContent = mdFileContent
+                        newMdFileContent = newMdFileContent
                             .Replace($"![{oldFileNameWithoutExt}](", $"![](", StringComparison.InvariantCultureIgnoreCase)
                             .Replace($"![{oldFileName}](", $"![](", StringComparison.InvariantCultureIgnoreCase);
                         #endregion

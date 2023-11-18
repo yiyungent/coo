@@ -9,7 +9,7 @@
 		<ToolCommandName>coo</ToolCommandName>
 		<PackageOutputPath>../../nupkg</PackageOutputPath>
 
-		<Version>0.4.13</Version>
+		<Version>0.4.14</Version>
 		<Company>yiyun</Company>
 		<Authors>yiyun</Authors>
 		<Description>.NET 自用 CLI | 工具集</Description>
