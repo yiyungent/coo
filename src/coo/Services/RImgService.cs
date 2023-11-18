@@ -86,8 +86,21 @@ namespace coo.Services
                     if (!string.IsNullOrEmpty(mdFilePath))
                     {
                         string mdFileContent = File.ReadAllText(mdFilePath, System.Text.Encoding.UTF8);
-                        string newMdFileContent = mdFileContent.Replace(oldFileName, newFileName);
-                        newMdFileContent = mdFileContent.Replace(oldFileNameWithoutExt, newFileNameWithoutExt);
+
+                        #region 替换
+                        // md 文件中图片引用:
+                        // ![image-2023-02-25-16-40-33](nps-notebook/image-2023-02-25-16-40-33.png)
+                        string mdFileNameWithoutExt = Path.GetFileNameWithoutExtension(mdFilePath);
+                        // 注意: 尽量匹配精确一点,
+                        // 有部分图片为 1.png, 2.png 等,
+                        // 以及部分引用为 ![image-2023-02-25-16-40-33](./nps-notebook/image-2023-02-25-16-40-33.png)
+                        string newMdFileContent = mdFileContent.Replace($"{mdFileNameWithoutExt}/{oldFileName}", $"{mdFileNameWithoutExt}/{newFileName}",
+                            StringComparison.InvariantCultureIgnoreCase);
+                        //newMdFileContent = mdFileContent.Replace($"![{oldFileNameWithoutExt}](", $"![{newFileNameWithoutExt}](");
+                        newMdFileContent = mdFileContent.Replace($"![{oldFileNameWithoutExt}](", $"![](",
+                            StringComparison.InvariantCultureIgnoreCase);
+                        #endregion
+
                         File.WriteAllText(mdFilePath, newMdFileContent, System.Text.Encoding.UTF8);
                     }
                     #endregion
